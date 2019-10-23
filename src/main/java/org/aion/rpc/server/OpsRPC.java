@@ -17,7 +17,7 @@ import org.aion.util.types.ByteArrayWrapper;
 * BE WIPED OUT WHEN THIS FILE GETS RE-GENERATED OR UPDATED.
 *
 *****************************************************************************/
-public interface OpsRPC{
+public interface OpsRPC extends RPC{
 
     default Object execute(Request request){
         try{
@@ -52,8 +52,6 @@ public interface OpsRPC{
             throw InternalErrorRPCException.INSTANCE;
         }
     }
-
-    boolean isExecutable(String method);
 
     default Set<String> listMethods(){
         return Set.of( "ops_getBlockDetailsByNumber", "ops_getBlockDetailsByHash");

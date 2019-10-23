@@ -17,7 +17,7 @@ import org.aion.util.types.ByteArrayWrapper;
 * BE WIPED OUT WHEN THIS FILE GETS RE-GENERATED OR UPDATED.
 *
 *****************************************************************************/
-public interface PersonalRPC{
+public interface PersonalRPC extends RPC{
 
     default Object execute(Request request){
         try{
@@ -39,8 +39,6 @@ public interface PersonalRPC{
             throw InternalErrorRPCException.INSTANCE;
         }
     }
-
-    boolean isExecutable(String method);
 
     default Set<String> listMethods(){
         return Set.of( "personal_ecRecover");
