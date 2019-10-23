@@ -17,18 +17,16 @@ public class Personal{
 
     private final Provider provider;
 
-    public Personal(final Provider _provider){
-        this.provider = _provider;
+    public Personal(final Provider provider){
+        this.provider = provider;
     }
-
-    public final AionAddress ecRecover(ByteArrayWrapper dataThatWasSigned,ByteArrayWrapper signature){
+    public final AionAddress ecRecover(ByteArray dataThatWasSigned,ByteArray signature){
         EcRecoverParams params= new EcRecoverParams(dataThatWasSigned ,signature);
         Request request = new Request(0, "personal_ecRecover", EcRecoverParamsConverter.encode(params), VersionType.Version2);
 
         return provider.execute(request, AionAddressConverter::decode);
     }
-
-    public final <O> CompletableFuture<O> ecRecover(ByteArrayWrapper dataThatWasSigned,ByteArrayWrapper signature, BiFunction<AionAddress, RPCError, O> asyncTask){
+    public final <O> CompletableFuture<O> ecRecover(ByteArray dataThatWasSigned,ByteArray signature, BiFunction<AionAddress, RPCError, O> asyncTask){
         EcRecoverParams params= new EcRecoverParams(dataThatWasSigned ,signature);
         Request request = new Request(0, "personal_ecRecover", EcRecoverParamsConverter.encode(params), VersionType.Version2);
 

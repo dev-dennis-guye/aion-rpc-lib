@@ -17,17 +17,30 @@ import org.aion.util.types.ByteArrayWrapper;
 * BE WIPED OUT WHEN THIS FILE GETS RE-GENERATED OR UPDATED.
 *
 *****************************************************************************/
-public interface PersonalRPC{
+public interface OpsRPC{
 
     default Object execute(Request request){
         try{
             //check that the request can be fulfilled by this class
-            if(request.method.equals("personal_ecRecover")){
+            if(request.method.equals("ops_getBlockDetailsByNumber")){
+                try{
+                BlockByNumberParams params;
+                params=BlockByNumberParamsConverter.decode(request.params);
+                BlockDetails result = this.ops_getBlockDetailsByNumber(params.block);
+                return BlockDetailsConverter.encode(result);
+                }catch(Exception e){/*Do nothing and attempt the next param*/}
+                BlockByEnumParams params;
+                params=BlockByEnumParamsConverter.decode(request.params);
+                BlockDetails result = this.ops_getBlockDetailsByNumber(params.block);
+                return BlockDetailsConverter.encode(result);
                 
-                EcRecoverParams params;
-                params=EcRecoverParamsConverter.decode(request.params);
-                AionAddress result = this.personal_ecRecover(params.dataThatWasSigned,params.signature);
-                return AionAddressConverter.encode(result);
+            }else
+            if(request.method.equals("ops_getBlockDetailsByHash")){
+                
+                BlockByHashParams params;
+                params=BlockByHashParamsConverter.decode(request.params);
+                BlockDetails result = this.ops_getBlockDetailsByHash(params.block);
+                return BlockDetailsConverter.encode(result);
                 
             }else
                 throw MethodNotFoundRPCException.INSTANCE;
@@ -43,8 +56,10 @@ public interface PersonalRPC{
     boolean isExecutable(String method);
 
     default Set<String> listMethods(){
-        return Set.of( "personal_ecRecover");
+        return Set.of( "ops_getBlockDetailsByNumber", "ops_getBlockDetailsByHash");
     }
 
-    AionAddress personal_ecRecover(ByteArray dataThatWasSigned, ByteArray signature);
+    BlockDetails ops_getBlockDetailsByNumber(Long block);
+    BlockDetails ops_getBlockDetailsByNumber(BlockEnum block);
+    BlockDetails ops_getBlockDetailsByHash(ByteArray block);
 }
