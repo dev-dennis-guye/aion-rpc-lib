@@ -487,7 +487,7 @@ public class RPCTypesConverter{
             try{
                 if(str==null) return null;
                 JSONObject jsonObject = new JSONObject(((String) str).replaceAll("\\\\",""));
-                return new BlockDetails( LongConverter.decode(jsonObject.opt("number")) , DataHexStringConverter.decode(jsonObject.opt("hash")) , DataHexStringConverter.decode(jsonObject.opt("parentHash")) , ByteArrayConverter.decode(jsonObject.opt("logsBloom")) , DataHexStringConverter.decode(jsonObject.opt("transactionsRoot")) , DataHexStringConverter.decode(jsonObject.opt("statesRoot")) , DataHexStringConverter.decode(jsonObject.opt("receiptsRoot")) , LongHexStringConverter.decode(jsonObject.opt("difficulty")) , BigIntegerHexStringConverter.decode(jsonObject.opt("totalDifficulty")) , AionAddressConverter.decode(jsonObject.opt("miner")) , LongHexStringConverter.decode(jsonObject.opt("timestamp")) , LongHexStringConverter.decode(jsonObject.opt("gasUsed")) , LongHexStringConverter.decode(jsonObject.opt("gasLimit")) , LongHexStringConverter.decode(jsonObject.opt("nrgUsed")) , LongHexStringConverter.decode(jsonObject.opt("nrgLimit")) , ByteHexStringConverter.decode(jsonObject.opt("sealType")) , BooleanConverter.decode(jsonObject.opt("mainChain")) , DataHexStringConverter.decode(jsonObject.opt("antiParentHash")) , DataHexStringConverter.decode(jsonObject.opt("extraData")) , IntegerConverter.decode(jsonObject.opt("size")) , IntegerConverter.decode(jsonObject.opt("numTransactions")) , DataHexStringConverter.decode(jsonObject.opt("txTrieRoot")) , BigIntegerHexStringConverter.decode(jsonObject.opt("blockReward")) , TransactionDetailsListConverter.decode(jsonObject.opt("transactions")) , DataHexStringConverter.decode(jsonObject.opt("nonce")) , DataHexStringConverter.decode(jsonObject.opt("solution")) , DataHexStringConverter.decode(jsonObject.opt("seed")) , DataHexStringConverter.decode(jsonObject.opt("signature")) , DataHexStringConverter.decode(jsonObject.opt("publicKey")) , IntegerConverter.decode(jsonObject.opt("blockTime")) );
+                return new BlockDetails( LongConverter.decode(jsonObject.opt("number")) , DataHexStringConverter.decode(jsonObject.opt("hash")) , DataHexStringConverter.decode(jsonObject.opt("parentHash")) , ByteArrayConverter.decode(jsonObject.opt("logsBloom")) , DataHexStringConverter.decode(jsonObject.opt("transactionsRoot")) , DataHexStringConverter.decode(jsonObject.opt("statesRoot")) , DataHexStringConverter.decode(jsonObject.opt("receiptsRoot")) , BigIntegerHexStringConverter.decode(jsonObject.opt("difficulty")) , BigIntegerHexStringConverter.decode(jsonObject.opt("totalDifficulty")) , AionAddressConverter.decode(jsonObject.opt("miner")) , LongHexStringConverter.decode(jsonObject.opt("timestamp")) , LongHexStringConverter.decode(jsonObject.opt("gasUsed")) , LongHexStringConverter.decode(jsonObject.opt("gasLimit")) , LongHexStringConverter.decode(jsonObject.opt("nrgUsed")) , LongHexStringConverter.decode(jsonObject.opt("nrgLimit")) , ByteHexStringConverter.decode(jsonObject.opt("sealType")) , BooleanConverter.decode(jsonObject.opt("mainChain")) , DataHexStringConverter.decode(jsonObject.opt("extraData")) , IntegerConverter.decode(jsonObject.opt("size")) , IntegerConverter.decode(jsonObject.opt("numTransactions")) , DataHexStringConverter.decode(jsonObject.opt("txTrieRoot")) , BigIntegerHexStringConverter.decode(jsonObject.opt("blockReward")) , TransactionDetailsListConverter.decode(jsonObject.opt("transactions")) , DataHexStringConverter.decode(jsonObject.opt("nonce")) , DataHexStringConverter.decode(jsonObject.opt("solution")) , DataHexStringConverter.decode(jsonObject.opt("seed")) , DataHexStringConverter.decode(jsonObject.opt("signature")) , DataHexStringConverter.decode(jsonObject.opt("publicKey")) , IntegerConverter.decode(jsonObject.opt("blockTime")) );
             } catch (Exception e){
                 throw ParseErrorRPCException.INSTANCE;
             }
@@ -504,7 +504,7 @@ public class RPCTypesConverter{
                 jsonObject.put("transactionsRoot", DataHexStringConverter.encode(obj.transactionsRoot));
                 jsonObject.put("statesRoot", DataHexStringConverter.encode(obj.statesRoot));
                 jsonObject.put("receiptsRoot", DataHexStringConverter.encode(obj.receiptsRoot));
-                jsonObject.put("difficulty", LongHexStringConverter.encode(obj.difficulty));
+                jsonObject.put("difficulty", BigIntegerHexStringConverter.encode(obj.difficulty));
                 jsonObject.put("totalDifficulty", BigIntegerHexStringConverter.encode(obj.totalDifficulty));
                 jsonObject.put("miner", AionAddressConverter.encode(obj.miner));
                 jsonObject.put("timestamp", LongHexStringConverter.encode(obj.timestamp));
@@ -514,7 +514,6 @@ public class RPCTypesConverter{
                 jsonObject.put("nrgLimit", LongHexStringConverter.encode(obj.nrgLimit));
                 jsonObject.put("sealType", ByteHexStringConverter.encode(obj.sealType));
                 jsonObject.put("mainChain", BooleanConverter.encode(obj.mainChain));
-                jsonObject.put("antiParentHash", DataHexStringConverter.encode(obj.antiParentHash));
                 jsonObject.put("extraData", DataHexStringConverter.encode(obj.extraData));
                 jsonObject.put("size", IntegerConverter.encode(obj.size));
                 jsonObject.put("numTransactions", IntegerConverter.encode(obj.numTransactions));
@@ -545,7 +544,7 @@ public class RPCTypesConverter{
                 jsonObject.put("transactionsRoot", DataHexStringConverter.encode(obj.transactionsRoot));
                 jsonObject.put("statesRoot", DataHexStringConverter.encode(obj.statesRoot));
                 jsonObject.put("receiptsRoot", DataHexStringConverter.encode(obj.receiptsRoot));
-                jsonObject.put("difficulty", LongHexStringConverter.encode(obj.difficulty));
+                jsonObject.put("difficulty", BigIntegerHexStringConverter.encode(obj.difficulty));
                 jsonObject.put("totalDifficulty", BigIntegerHexStringConverter.encode(obj.totalDifficulty));
                 jsonObject.put("miner", AionAddressConverter.encode(obj.miner));
                 jsonObject.put("timestamp", LongHexStringConverter.encode(obj.timestamp));
@@ -555,7 +554,6 @@ public class RPCTypesConverter{
                 jsonObject.put("nrgLimit", LongHexStringConverter.encode(obj.nrgLimit));
                 jsonObject.put("sealType", ByteHexStringConverter.encode(obj.sealType));
                 jsonObject.put("mainChain", BooleanConverter.encode(obj.mainChain));
-                jsonObject.put("antiParentHash", DataHexStringConverter.encode(obj.antiParentHash));
                 jsonObject.put("extraData", DataHexStringConverter.encode(obj.extraData));
                 jsonObject.put("size", IntegerConverter.encode(obj.size));
                 jsonObject.put("numTransactions", IntegerConverter.encode(obj.numTransactions));

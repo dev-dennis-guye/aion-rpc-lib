@@ -187,7 +187,7 @@ public class RPCTypes{
         public final ByteArray transactionsRoot;
         public final ByteArray statesRoot;
         public final ByteArray receiptsRoot;
-        public final Long difficulty;
+        public final BigInteger difficulty;
         public final BigInteger totalDifficulty;
         public final AionAddress miner;
         public final Long timestamp;
@@ -197,7 +197,6 @@ public class RPCTypes{
         public final Long nrgLimit;
         public final Byte sealType;
         public final Boolean mainChain;
-        public final ByteArray antiParentHash;
         public final ByteArray extraData;
         public final Integer size;
         public final Integer numTransactions;
@@ -211,7 +210,7 @@ public class RPCTypes{
         public final ByteArray publicKey;
         public final Integer blockTime;
 
-        public BlockDetails(Long number ,ByteArray hash ,ByteArray parentHash ,ByteArray logsBloom ,ByteArray transactionsRoot ,ByteArray statesRoot ,ByteArray receiptsRoot ,Long difficulty ,BigInteger totalDifficulty ,AionAddress miner ,Long timestamp ,Long gasUsed ,Long gasLimit ,Long nrgUsed ,Long nrgLimit ,Byte sealType ,Boolean mainChain ,ByteArray antiParentHash ,ByteArray extraData ,Integer size ,Integer numTransactions ,ByteArray txTrieRoot ,BigInteger blockReward ,List<TransactionDetails> transactions ,ByteArray nonce ,ByteArray solution ,ByteArray seed ,ByteArray signature ,ByteArray publicKey ,Integer blockTime ){
+        public BlockDetails(Long number ,ByteArray hash ,ByteArray parentHash ,ByteArray logsBloom ,ByteArray transactionsRoot ,ByteArray statesRoot ,ByteArray receiptsRoot ,BigInteger difficulty ,BigInteger totalDifficulty ,AionAddress miner ,Long timestamp ,Long gasUsed ,Long gasLimit ,Long nrgUsed ,Long nrgLimit ,Byte sealType ,Boolean mainChain ,ByteArray extraData ,Integer size ,Integer numTransactions ,ByteArray txTrieRoot ,BigInteger blockReward ,List<TransactionDetails> transactions ,ByteArray nonce ,ByteArray solution ,ByteArray seed ,ByteArray signature ,ByteArray publicKey ,Integer blockTime ){
             if(number==null) throw ParseErrorRPCException.INSTANCE;
             this.number=number;
             if(hash==null) throw ParseErrorRPCException.INSTANCE;
@@ -246,8 +245,6 @@ public class RPCTypes{
             this.sealType=sealType;
             if(mainChain==null) throw ParseErrorRPCException.INSTANCE;
             this.mainChain=mainChain;
-            if(antiParentHash==null) throw ParseErrorRPCException.INSTANCE;
-            this.antiParentHash=antiParentHash;
             if(extraData==null) throw ParseErrorRPCException.INSTANCE;
             this.extraData=extraData;
             if(size==null) throw ParseErrorRPCException.INSTANCE;
