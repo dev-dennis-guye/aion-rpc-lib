@@ -20,28 +20,14 @@ import org.aion.util.types.ByteArrayWrapper;
 public interface OpsRPC extends RPC{
 
     default Object execute(Request request){
+        Object res;
         try{
             //check that the request can be fulfilled by this class
-            if(request.method.equals("ops_getBlockDetailsByNumber")){
-                try{
-                BlockByNumberParams params;
-                params=BlockByNumberParamsConverter.decode(request.params);
-                BlockDetails result = this.ops_getBlockDetailsByNumber(params.block);
-                return BlockDetailsConverter.encode(result);
-                }catch(Exception e){/*Do nothing and attempt the next param*/}
-                BlockByEnumParams params;
-                params=BlockByEnumParamsConverter.decode(request.params);
-                BlockDetails result = this.ops_getBlockDetailsByNumber(params.block);
-                return BlockDetailsConverter.encode(result);
-                
-            }else
-            if(request.method.equals("ops_getBlockDetailsByHash")){
-                
-                BlockByHashParams params;
-                params=BlockByHashParamsConverter.decode(request.params);
-                BlockDetails result = this.ops_getBlockDetailsByHash(params.block);
-                return BlockDetailsConverter.encode(result);
-                
+            if(request.method.equals("ops_getBlockDetails")){
+                blockSpecifier params;
+                params=blockSpecifierConverter.decode(request.params);
+                BlockDetails result = this.ops_getBlockDetails(params.blockNumber,params.blockEnum,params.blockHash);
+                res = BlockDetailsConverter.encode(result);
             }else
                 throw MethodNotFoundRPCException.INSTANCE;
         }
@@ -51,13 +37,12 @@ public interface OpsRPC extends RPC{
         catch(Exception e){
             throw InternalErrorRPCException.INSTANCE;
         }
+        return res;
     }
 
     default Set<String> listMethods(){
-        return Set.of( "ops_getBlockDetailsByNumber", "ops_getBlockDetailsByHash");
+        return Set.of( "ops_getBlockDetails");
     }
 
-    BlockDetails ops_getBlockDetailsByNumber(Long block);
-    BlockDetails ops_getBlockDetailsByNumber(BlockEnum block);
-    BlockDetails ops_getBlockDetailsByHash(ByteArray block);
+    BlockDetails ops_getBlockDetails(Long blockNumber, BlockEnum blockEnum, ByteArray blockHash);
 }

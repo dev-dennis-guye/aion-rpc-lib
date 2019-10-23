@@ -813,19 +813,19 @@ public class RPCTypesConverter{
         }
     }
 
-    public static class BlockByNumberParamsConverter{
-        public static BlockByNumberParams decode(Object object){
+    public static class blockSpecifierConverter{
+        public static blockSpecifier decode(Object object){
             if(object==null) return null;
             String s = object.toString().replaceAll("\\\\","");
             try{
-                BlockByNumberParams obj;
+                blockSpecifier obj;
                 if(s.startsWith("[") && s.endsWith("]")){
                     JSONArray jsonArray = new JSONArray(s);
-                    obj = new BlockByNumberParams( LongConverter.decode(jsonArray.opt(0)));
+                    obj = new blockSpecifier( LongConverter.decode(jsonArray.opt(0)), BlockEnumConverter.decode(jsonArray.opt(0)), Byte32StringConverter.decode(jsonArray.opt(0)));
                 }
                 else if(s.startsWith("{") && s.endsWith("}")){
                     JSONObject jsonObject = new JSONObject(s);
-                    obj = new BlockByNumberParams( LongConverter.decode(jsonObject.opt("block")));
+                    obj = new blockSpecifier( LongConverter.decode(jsonObject.opt("blockNumber")), BlockEnumConverter.decode(jsonObject.opt("blockEnum")), Byte32StringConverter.decode(jsonObject.opt("blockHash")));
                 }
                 else{
                     throw ParseErrorRPCException.INSTANCE;
@@ -837,80 +837,12 @@ public class RPCTypesConverter{
             }
         }
 
-        public static Object encode(BlockByNumberParams obj){
+        public static Object encode(blockSpecifier obj){
             try{
                 JSONArray arr = new JSONArray();
-                arr.put(0, LongConverter.encode(obj.block));
-                return arr;
-            }catch(Exception e){
-                throw ParseErrorRPCException.INSTANCE;
-            }
-        }
-    }
-
-    public static class BlockByEnumParamsConverter{
-        public static BlockByEnumParams decode(Object object){
-            if(object==null) return null;
-            String s = object.toString().replaceAll("\\\\","");
-            try{
-                BlockByEnumParams obj;
-                if(s.startsWith("[") && s.endsWith("]")){
-                    JSONArray jsonArray = new JSONArray(s);
-                    obj = new BlockByEnumParams( BlockEnumConverter.decode(jsonArray.opt(0)));
-                }
-                else if(s.startsWith("{") && s.endsWith("}")){
-                    JSONObject jsonObject = new JSONObject(s);
-                    obj = new BlockByEnumParams( BlockEnumConverter.decode(jsonObject.opt("block")));
-                }
-                else{
-                    throw ParseErrorRPCException.INSTANCE;
-                }
-                return obj;
-            }
-            catch(Exception e){
-                throw InvalidParamsRPCException.INSTANCE;
-            }
-        }
-
-        public static Object encode(BlockByEnumParams obj){
-            try{
-                JSONArray arr = new JSONArray();
-                arr.put(0, BlockEnumConverter.encode(obj.block));
-                return arr;
-            }catch(Exception e){
-                throw ParseErrorRPCException.INSTANCE;
-            }
-        }
-    }
-
-    public static class BlockByHashParamsConverter{
-        public static BlockByHashParams decode(Object object){
-            if(object==null) return null;
-            String s = object.toString().replaceAll("\\\\","");
-            try{
-                BlockByHashParams obj;
-                if(s.startsWith("[") && s.endsWith("]")){
-                    JSONArray jsonArray = new JSONArray(s);
-                    obj = new BlockByHashParams( Byte32StringConverter.decode(jsonArray.opt(0)));
-                }
-                else if(s.startsWith("{") && s.endsWith("}")){
-                    JSONObject jsonObject = new JSONObject(s);
-                    obj = new BlockByHashParams( Byte32StringConverter.decode(jsonObject.opt("block")));
-                }
-                else{
-                    throw ParseErrorRPCException.INSTANCE;
-                }
-                return obj;
-            }
-            catch(Exception e){
-                throw InvalidParamsRPCException.INSTANCE;
-            }
-        }
-
-        public static Object encode(BlockByHashParams obj){
-            try{
-                JSONArray arr = new JSONArray();
-                arr.put(0, Byte32StringConverter.encode(obj.block));
+                arr.put(0, LongConverter.encode(obj.blockNumber));
+                                arr.put(0, BlockEnumConverter.encode(obj.blockEnum));
+                                arr.put(0, Byte32StringConverter.encode(obj.blockHash));
                 return arr;
             }catch(Exception e){
                 throw ParseErrorRPCException.INSTANCE;

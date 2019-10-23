@@ -20,15 +20,14 @@ import org.aion.util.types.ByteArrayWrapper;
 public interface PersonalRPC extends RPC{
 
     default Object execute(Request request){
+        Object res;
         try{
             //check that the request can be fulfilled by this class
             if(request.method.equals("personal_ecRecover")){
-                
                 EcRecoverParams params;
                 params=EcRecoverParamsConverter.decode(request.params);
                 AionAddress result = this.personal_ecRecover(params.dataThatWasSigned,params.signature);
-                return AionAddressConverter.encode(result);
-                
+                res = AionAddressConverter.encode(result);
             }else
                 throw MethodNotFoundRPCException.INSTANCE;
         }
@@ -38,6 +37,7 @@ public interface PersonalRPC extends RPC{
         catch(Exception e){
             throw InternalErrorRPCException.INSTANCE;
         }
+        return res;
     }
 
     default Set<String> listMethods(){

@@ -20,12 +20,14 @@ public class Personal{
     public Personal(final Provider provider){
         this.provider = provider;
     }
+
     public final AionAddress ecRecover(ByteArray dataThatWasSigned,ByteArray signature){
         EcRecoverParams params= new EcRecoverParams(dataThatWasSigned ,signature);
         Request request = new Request(0, "personal_ecRecover", EcRecoverParamsConverter.encode(params), VersionType.Version2);
 
         return provider.execute(request, AionAddressConverter::decode);
     }
+
     public final <O> CompletableFuture<O> ecRecover(ByteArray dataThatWasSigned,ByteArray signature, BiFunction<AionAddress, RPCError, O> asyncTask){
         EcRecoverParams params= new EcRecoverParams(dataThatWasSigned ,signature);
         Request request = new Request(0, "personal_ecRecover", EcRecoverParamsConverter.encode(params), VersionType.Version2);

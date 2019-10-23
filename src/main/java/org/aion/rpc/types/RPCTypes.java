@@ -308,25 +308,15 @@ public class RPCTypes{
             this.signature=signature;
         }
     }
-    public static final class BlockByNumberParams {
-        public final Long block;
+    public static final class blockSpecifier {
+        public final Long blockNumber;
+        public final BlockEnum blockEnum;
+        public final ByteArray blockHash;
 
-        public BlockByNumberParams(Long block ){
-            this.block=block;
-        }
-    }
-    public static final class BlockByEnumParams {
-        public final BlockEnum block;
-
-        public BlockByEnumParams(BlockEnum block ){
-            this.block=block;
-        }
-    }
-    public static final class BlockByHashParams {
-        public final ByteArray block;
-
-        public BlockByHashParams(ByteArray block ){
-            this.block=block;
+        public blockSpecifier(Long blockNumber ,BlockEnum blockEnum ,ByteArray blockHash ){
+            this.blockNumber=blockNumber;
+            this.blockEnum=blockEnum;
+            this.blockHash=blockHash;
         }
     }
 }
