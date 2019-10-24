@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import org.aion.rpc.errors.RPCExceptions.*;
+import org.aion.rpc.types.RPCTypesConverter.*;
 import org.aion.types.AionAddress;
 import org.aion.util.bytes.ByteUtil;
 /******************************************************************************
@@ -41,6 +42,50 @@ public class RPCTypes{
 
         public static ByteArray wrap(byte[] bytes){
             return new ByteArray(bytes);
+        }
+    }
+
+    /**
+    * Specifies a block
+    */
+    public static final class BlockSpecifierUnion{
+        public final ByteArray hash;
+        public final Long blockNumber;
+        public final BlockEnum blockEnum;
+        private BlockSpecifierUnion(ByteArray hash ,Long blockNumber ,BlockEnum blockEnum ){
+            this.hash=hash;
+            this.blockNumber=blockNumber;
+            this.blockEnum=blockEnum;
+        }
+
+        public BlockSpecifierUnion(ByteArray hash){
+            this(hash,null,null);
+        }
+        public BlockSpecifierUnion(Long blockNumber){
+            this(null,blockNumber,null);
+        }
+        public BlockSpecifierUnion(BlockEnum blockEnum){
+            this(null,null,blockEnum);
+        }
+
+        public Object encode(){
+            if(this.hash != null) return ByteArrayConverter.encode(hash);
+            if(this.blockNumber != null) return LongConverter.encode(blockNumber);
+            if(this.blockEnum != null) return BlockEnumConverter.encode(blockEnum);
+            throw ParseErrorRPCException.INSTANCE;
+        }
+
+        public static BlockSpecifierUnion decode(Object object){
+            try{
+                return new BlockSpecifierUnion(ByteArrayConverter.decode(object));
+            }catch(Exception e){}
+            try{
+                return new BlockSpecifierUnion(LongConverter.decode(object));
+            }catch(Exception e){}
+            try{
+                return new BlockSpecifierUnion(BlockEnumConverter.decode(object));
+            }catch(Exception e){}
+            throw ParseErrorRPCException.INSTANCE;
         }
     }
 
@@ -308,15 +353,12 @@ public class RPCTypes{
             this.signature=signature;
         }
     }
-    public static final class blockSpecifier {
-        public final Long blockNumber;
-        public final BlockEnum blockEnum;
-        public final ByteArray blockHash;
+    public static final class BlockSpecifier {
+        public final BlockSpecifierUnion block;
 
-        public blockSpecifier(Long blockNumber ,BlockEnum blockEnum ,ByteArray blockHash ){
-            this.blockNumber=blockNumber;
-            this.blockEnum=blockEnum;
-            this.blockHash=blockHash;
+        public BlockSpecifier(BlockSpecifierUnion block ){
+            if(block==null) throw ParseErrorRPCException.INSTANCE;
+            this.block=block;
         }
     }
 }

@@ -244,6 +244,22 @@ public class RPCTypesConverter{
             else return "0x"+address.toString();
         }
     }
+    public static class BlockSpecifierUnionConverter{
+        public static BlockSpecifierUnion decode(Object str){
+            if(str==null) return null;
+            else return BlockSpecifierUnion.decode(str);
+        }
+
+        public static Object encode(BlockSpecifierUnion obj){
+            if(obj==null) return null;
+            else return obj.encode();
+        }
+
+        public static String encodeStr(BlockSpecifierUnion obj){
+            if(obj==null) return null;
+            else return obj.encode().toString();
+        }
+    }
 
     public static class RequestConverter{
         public static Request decode(Object str){
@@ -813,19 +829,19 @@ public class RPCTypesConverter{
         }
     }
 
-    public static class blockSpecifierConverter{
-        public static blockSpecifier decode(Object object){
+    public static class BlockSpecifierConverter{
+        public static BlockSpecifier decode(Object object){
             if(object==null) return null;
             String s = object.toString().replaceAll("\\\\","");
             try{
-                blockSpecifier obj;
+                BlockSpecifier obj;
                 if(s.startsWith("[") && s.endsWith("]")){
                     JSONArray jsonArray = new JSONArray(s);
-                    obj = new blockSpecifier( LongConverter.decode(jsonArray.opt(0)), BlockEnumConverter.decode(jsonArray.opt(0)), Byte32StringConverter.decode(jsonArray.opt(0)));
+                    obj = new BlockSpecifier( BlockSpecifierUnionConverter.decode(jsonArray.opt(0)));
                 }
                 else if(s.startsWith("{") && s.endsWith("}")){
                     JSONObject jsonObject = new JSONObject(s);
-                    obj = new blockSpecifier( LongConverter.decode(jsonObject.opt("blockNumber")), BlockEnumConverter.decode(jsonObject.opt("blockEnum")), Byte32StringConverter.decode(jsonObject.opt("blockHash")));
+                    obj = new BlockSpecifier( BlockSpecifierUnionConverter.decode(jsonObject.opt("block")));
                 }
                 else{
                     throw ParseErrorRPCException.INSTANCE;
@@ -837,12 +853,10 @@ public class RPCTypesConverter{
             }
         }
 
-        public static Object encode(blockSpecifier obj){
+        public static Object encode(BlockSpecifier obj){
             try{
                 JSONArray arr = new JSONArray();
-                arr.put(0, LongConverter.encode(obj.blockNumber));
-                                arr.put(0, BlockEnumConverter.encode(obj.blockEnum));
-                                arr.put(0, Byte32StringConverter.encode(obj.blockHash));
+                arr.put(0, BlockSpecifierUnionConverter.encode(obj.block));
                 return arr;
             }catch(Exception e){
                 throw ParseErrorRPCException.INSTANCE;

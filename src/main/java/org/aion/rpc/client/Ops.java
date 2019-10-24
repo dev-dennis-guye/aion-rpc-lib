@@ -21,16 +21,16 @@ public class Ops{
         this.provider = provider;
     }
 
-    public final BlockDetails getBlockDetails(Long blockNumber,BlockEnum blockEnum,ByteArray blockHash){
-        blockSpecifier params= new blockSpecifier(blockNumber ,blockEnum ,blockHash);
-        Request request = new Request(0, "ops_getBlockDetails", blockSpecifierConverter.encode(params), VersionType.Version2);
+    public final BlockDetails getBlockDetails(BlockSpecifierUnion block){
+        BlockSpecifier params= new BlockSpecifier(block);
+        Request request = new Request(0, "ops_getBlockDetails", BlockSpecifierConverter.encode(params), VersionType.Version2);
 
         return provider.execute(request, BlockDetailsConverter::decode);
     }
 
-    public final <O> CompletableFuture<O> getBlockDetails(Long blockNumber,BlockEnum blockEnum,ByteArray blockHash, BiFunction<BlockDetails, RPCError, O> asyncTask){
-        blockSpecifier params= new blockSpecifier(blockNumber ,blockEnum ,blockHash);
-        Request request = new Request(0, "ops_getBlockDetails", blockSpecifierConverter.encode(params), VersionType.Version2);
+    public final <O> CompletableFuture<O> getBlockDetails(BlockSpecifierUnion block, BiFunction<BlockDetails, RPCError, O> asyncTask){
+        BlockSpecifier params= new BlockSpecifier(block);
+        Request request = new Request(0, "ops_getBlockDetails", BlockSpecifierConverter.encode(params), VersionType.Version2);
 
         return provider.executeAsync(request, BlockDetailsConverter::decode, asyncTask);
     }

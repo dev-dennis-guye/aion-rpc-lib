@@ -24,9 +24,9 @@ public interface OpsRPC extends RPC{
         try{
             //check that the request can be fulfilled by this class
             if(request.method.equals("ops_getBlockDetails")){
-                blockSpecifier params;
-                params=blockSpecifierConverter.decode(request.params);
-                BlockDetails result = this.ops_getBlockDetails(params.blockNumber,params.blockEnum,params.blockHash);
+                BlockSpecifier params;
+                params=BlockSpecifierConverter.decode(request.params);
+                BlockDetails result = this.ops_getBlockDetails(params.block);
                 res = BlockDetailsConverter.encode(result);
             }else
                 throw MethodNotFoundRPCException.INSTANCE;
@@ -44,5 +44,5 @@ public interface OpsRPC extends RPC{
         return Set.of( "ops_getBlockDetails");
     }
 
-    BlockDetails ops_getBlockDetails(Long blockNumber, BlockEnum blockEnum, ByteArray blockHash);
+    BlockDetails ops_getBlockDetails(BlockSpecifierUnion block);
 }
