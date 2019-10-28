@@ -23,15 +23,15 @@ public class Personal{
 
     public final AionAddress ecRecover(ByteArray dataThatWasSigned,ByteArray signature){
         EcRecoverParams params= new EcRecoverParams(dataThatWasSigned ,signature);
-        Request request = new Request(0, "personal_ecRecover", EcRecoverParamsConverter.encode(params), VersionType.Version2);
+        Request request = new Request(0, "personal_ecRecover", new ParamUnion(params), VersionType.Version2);
 
-        return provider.execute(request, AionAddressConverter::decode);
+        return provider.execute(request, r->r.address);
     }
 
     public final <O> CompletableFuture<O> ecRecover(ByteArray dataThatWasSigned,ByteArray signature, BiFunction<AionAddress, RPCError, O> asyncTask){
         EcRecoverParams params= new EcRecoverParams(dataThatWasSigned ,signature);
-        Request request = new Request(0, "personal_ecRecover", EcRecoverParamsConverter.encode(params), VersionType.Version2);
+        Request request = new Request(0, "personal_ecRecover", new ParamUnion(params), VersionType.Version2);
 
-        return provider.executeAsync(request, AionAddressConverter::decode, asyncTask);
+        return provider.executeAsync(request, r->r.address, asyncTask);
     }
 }

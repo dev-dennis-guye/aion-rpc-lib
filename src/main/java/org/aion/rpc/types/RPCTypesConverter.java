@@ -261,12 +261,46 @@ public class RPCTypesConverter{
         }
     }
 
+    public static class ResultUnionConverter{
+        public static ResultUnion decode(Object str){
+            if(str==null) return null;
+            else return ResultUnion.decode(str);
+        }
+
+        public static Object encode(ResultUnion obj){
+            if(obj==null) return null;
+            else return obj.encode();
+        }
+
+        public static String encodeStr(ResultUnion obj){
+            if(obj==null) return null;
+            else return obj.encode().toString();
+        }
+    }
+
+    public static class ParamUnionConverter{
+        public static ParamUnion decode(Object str){
+            if(str==null) return null;
+            else return ParamUnion.decode(str);
+        }
+
+        public static Object encode(ParamUnion obj){
+            if(obj==null) return null;
+            else return obj.encode();
+        }
+
+        public static String encodeStr(ParamUnion obj){
+            if(obj==null) return null;
+            else return obj.encode().toString();
+        }
+    }
+
     public static class RequestConverter{
         public static Request decode(Object str){
             try{
                 if(str==null) return null;
-                JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString().replaceAll("\\\\",""));
-                return new Request( IntegerConverter.decode(jsonObject.opt("id")) , StringConverter.decode(jsonObject.opt("method")) , ObjectConverter.decode(jsonObject.opt("params")) , VersionTypeConverter.decode(jsonObject.opt("jsonrpc")) );
+                JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString());
+                return new Request( IntegerConverter.decode(jsonObject.opt("id")) , StringConverter.decode(jsonObject.opt("method")) , ParamUnionConverter.decode(jsonObject.opt("params")) , VersionTypeConverter.decode(jsonObject.opt("jsonrpc")) );
             } catch (Exception e){
                 throw ParseErrorRPCException.INSTANCE;
             }
@@ -278,9 +312,9 @@ public class RPCTypesConverter{
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("id", IntegerConverter.encode(obj.id));
                 jsonObject.put("method", StringConverter.encode(obj.method));
-                jsonObject.put("params", ObjectConverter.encode(obj.params));
+                jsonObject.put("params", ParamUnionConverter.encode(obj.params));
                 jsonObject.put("jsonrpc", VersionTypeConverter.encode(obj.jsonrpc));
-                return jsonObject.toString().replaceAll("\\\\","");
+                return jsonObject.toString();
             }
             catch (Exception e){
                 throw ParseErrorRPCException.INSTANCE;
@@ -293,7 +327,7 @@ public class RPCTypesConverter{
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("id", IntegerConverter.encode(obj.id));
                 jsonObject.put("method", StringConverter.encode(obj.method));
-                jsonObject.put("params", ObjectConverter.encode(obj.params));
+                jsonObject.put("params", ParamUnionConverter.encode(obj.params));
                 jsonObject.put("jsonrpc", VersionTypeConverter.encode(obj.jsonrpc));
                 return jsonObject;
             }catch (Exception e){
@@ -306,8 +340,8 @@ public class RPCTypesConverter{
         public static Response decode(Object str){
             try{
                 if(str==null) return null;
-                JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString().replaceAll("\\\\",""));
-                return new Response( IntegerConverter.decode(jsonObject.opt("id")) , ObjectConverter.decode(jsonObject.opt("result")) , RPCErrorConverter.decode(jsonObject.opt("error")) , VersionTypeConverter.decode(jsonObject.opt("jsonrpc")) );
+                JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString());
+                return new Response( IntegerConverter.decode(jsonObject.opt("id")) , ResultUnionConverter.decode(jsonObject.opt("result")) , RPCErrorConverter.decode(jsonObject.opt("error")) , VersionTypeConverter.decode(jsonObject.opt("jsonrpc")) );
             } catch (Exception e){
                 throw ParseErrorRPCException.INSTANCE;
             }
@@ -318,10 +352,10 @@ public class RPCTypesConverter{
                 if(obj==null) return null;
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("id", IntegerConverter.encode(obj.id));
-                jsonObject.put("result", ObjectConverter.encode(obj.result));
+                jsonObject.put("result", ResultUnionConverter.encode(obj.result));
                 jsonObject.put("error", RPCErrorConverter.encode(obj.error));
                 jsonObject.put("jsonrpc", VersionTypeConverter.encode(obj.jsonrpc));
-                return jsonObject.toString().replaceAll("\\\\","");
+                return jsonObject.toString();
             }
             catch (Exception e){
                 throw ParseErrorRPCException.INSTANCE;
@@ -333,7 +367,7 @@ public class RPCTypesConverter{
                 if(obj==null) return null;
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("id", IntegerConverter.encode(obj.id));
-                jsonObject.put("result", ObjectConverter.encode(obj.result));
+                jsonObject.put("result", ResultUnionConverter.encode(obj.result));
                 jsonObject.put("error", RPCErrorConverter.encode(obj.error));
                 jsonObject.put("jsonrpc", VersionTypeConverter.encode(obj.jsonrpc));
                 return jsonObject;
@@ -347,7 +381,7 @@ public class RPCTypesConverter{
         public static RPCError decode(Object str){
             try{
                 if(str==null) return null;
-                JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString().replaceAll("\\\\",""));
+                JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString());
                 return new RPCError( IntegerConverter.decode(jsonObject.opt("code")) , StringConverter.decode(jsonObject.opt("message")) );
             } catch (Exception e){
                 throw ParseErrorRPCException.INSTANCE;
@@ -360,7 +394,7 @@ public class RPCTypesConverter{
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("code", IntegerConverter.encode(obj.code));
                 jsonObject.put("message", StringConverter.encode(obj.message));
-                return jsonObject.toString().replaceAll("\\\\","");
+                return jsonObject.toString();
             }
             catch (Exception e){
                 throw ParseErrorRPCException.INSTANCE;
@@ -384,7 +418,7 @@ public class RPCTypesConverter{
         public static TxLogDetails decode(Object str){
             try{
                 if(str==null) return null;
-                JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString().replaceAll("\\\\",""));
+                JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString());
                 return new TxLogDetails( AionAddressConverter.decode(jsonObject.opt("address")) , IntegerConverter.decode(jsonObject.opt("transactionIndex")) , DataHexStringConverter.decode(jsonObject.opt("data")) , DataHexStringListConverter.decode(jsonObject.opt("topics")) , LongConverter.decode(jsonObject.opt("blockNumber")) );
             } catch (Exception e){
                 throw ParseErrorRPCException.INSTANCE;
@@ -400,7 +434,7 @@ public class RPCTypesConverter{
                 jsonObject.put("data", DataHexStringConverter.encode(obj.data));
                 jsonObject.put("topics", DataHexStringListConverter.encode(obj.topics));
                 jsonObject.put("blockNumber", LongConverter.encode(obj.blockNumber));
-                return jsonObject.toString().replaceAll("\\\\","");
+                return jsonObject.toString();
             }
             catch (Exception e){
                 throw ParseErrorRPCException.INSTANCE;
@@ -427,7 +461,7 @@ public class RPCTypesConverter{
         public static TransactionDetails decode(Object str){
             try{
                 if(str==null) return null;
-                JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString().replaceAll("\\\\",""));
+                JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString());
                 return new TransactionDetails( AionAddressConverter.decode(jsonObject.opt("contractAddress")) , Byte32StringConverter.decode(jsonObject.opt("hash")) , IntegerConverter.decode(jsonObject.opt("transactionIndex")) , BigIntegerHexStringConverter.decode(jsonObject.opt("value")) , LongHexStringConverter.decode(jsonObject.opt("nrg")) , LongHexStringConverter.decode(jsonObject.opt("nrgPrice")) , LongHexStringConverter.decode(jsonObject.opt("gas")) , LongHexStringConverter.decode(jsonObject.opt("gasPrice")) , DataHexStringConverter.decode(jsonObject.opt("nonce")) , AionAddressConverter.decode(jsonObject.opt("from")) , AionAddressConverter.decode(jsonObject.opt("to")) , LongConverter.decode(jsonObject.opt("timestamp")) , DataHexStringConverter.decode(jsonObject.opt("input")) , LongHexStringConverter.decode(jsonObject.opt("blockNumber")) , Byte32StringConverter.decode(jsonObject.opt("blockHash")) , StringConverter.decode(jsonObject.opt("error")) , ByteHexStringConverter.decode(jsonObject.opt("type")) , LongHexStringConverter.decode(jsonObject.opt("nrgUsed")) , LongHexStringConverter.decode(jsonObject.opt("gasUsed")) , BooleanConverter.decode(jsonObject.opt("hasInternalTransactions")) , TxLogDetailsListConverter.decode(jsonObject.opt("logs")) );
             } catch (Exception e){
                 throw ParseErrorRPCException.INSTANCE;
@@ -459,7 +493,7 @@ public class RPCTypesConverter{
                 jsonObject.put("gasUsed", LongHexStringConverter.encode(obj.gasUsed));
                 jsonObject.put("hasInternalTransactions", BooleanConverter.encode(obj.hasInternalTransactions));
                 jsonObject.put("logs", TxLogDetailsListConverter.encode(obj.logs));
-                return jsonObject.toString().replaceAll("\\\\","");
+                return jsonObject.toString();
             }
             catch (Exception e){
                 throw ParseErrorRPCException.INSTANCE;
@@ -502,7 +536,7 @@ public class RPCTypesConverter{
         public static BlockDetails decode(Object str){
             try{
                 if(str==null) return null;
-                JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString().replaceAll("\\\\",""));
+                JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString());
                 return new BlockDetails( LongConverter.decode(jsonObject.opt("number")) , DataHexStringConverter.decode(jsonObject.opt("hash")) , DataHexStringConverter.decode(jsonObject.opt("parentHash")) , ByteArrayConverter.decode(jsonObject.opt("logsBloom")) , DataHexStringConverter.decode(jsonObject.opt("transactionsRoot")) , DataHexStringConverter.decode(jsonObject.opt("statesRoot")) , DataHexStringConverter.decode(jsonObject.opt("receiptsRoot")) , BigIntegerHexStringConverter.decode(jsonObject.opt("difficulty")) , BigIntegerHexStringConverter.decode(jsonObject.opt("totalDifficulty")) , AionAddressConverter.decode(jsonObject.opt("miner")) , LongHexStringConverter.decode(jsonObject.opt("timestamp")) , LongHexStringConverter.decode(jsonObject.opt("gasUsed")) , LongHexStringConverter.decode(jsonObject.opt("gasLimit")) , LongHexStringConverter.decode(jsonObject.opt("nrgUsed")) , LongHexStringConverter.decode(jsonObject.opt("nrgLimit")) , ByteHexStringConverter.decode(jsonObject.opt("sealType")) , BooleanConverter.decode(jsonObject.opt("mainChain")) , DataHexStringConverter.decode(jsonObject.opt("extraData")) , IntegerConverter.decode(jsonObject.opt("size")) , IntegerConverter.decode(jsonObject.opt("numTransactions")) , DataHexStringConverter.decode(jsonObject.opt("txTrieRoot")) , BigIntegerHexStringConverter.decode(jsonObject.opt("blockReward")) , TransactionDetailsListConverter.decode(jsonObject.opt("transactions")) , DataHexStringConverter.decode(jsonObject.opt("nonce")) , DataHexStringConverter.decode(jsonObject.opt("solution")) , DataHexStringConverter.decode(jsonObject.opt("seed")) , DataHexStringConverter.decode(jsonObject.opt("signature")) , DataHexStringConverter.decode(jsonObject.opt("publicKey")) , IntegerConverter.decode(jsonObject.opt("blockTime")) );
             } catch (Exception e){
                 throw ParseErrorRPCException.INSTANCE;
@@ -542,7 +576,7 @@ public class RPCTypesConverter{
                 jsonObject.put("signature", DataHexStringConverter.encode(obj.signature));
                 jsonObject.put("publicKey", DataHexStringConverter.encode(obj.publicKey));
                 jsonObject.put("blockTime", IntegerConverter.encode(obj.blockTime));
-                return jsonObject.toString().replaceAll("\\\\","");
+                return jsonObject.toString();
             }
             catch (Exception e){
                 throw ParseErrorRPCException.INSTANCE;

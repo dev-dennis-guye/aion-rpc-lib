@@ -19,15 +19,15 @@ import org.aion.util.types.ByteArrayWrapper;
 *****************************************************************************/
 public interface OpsRPC extends RPC{
 
-    default Object execute(Request request){
-        Object res;
+    default ResultUnion execute(Request request){
+        ResultUnion res;
         try{
             //check that the request can be fulfilled by this class
             if(request.method.equals("ops_getBlockDetails")){
-                BlockSpecifier params;
-                params=BlockSpecifierConverter.decode(request.params);
+                BlockSpecifier params=request.params.blockSpecifier;
+                if (params==null) throw InvalidParamsRPCException.INSTANCE;
                 BlockDetails result = this.ops_getBlockDetails(params.block);
-                res = BlockDetailsConverter.encode(result);
+                res = new ResultUnion(result);
             }else
                 throw MethodNotFoundRPCException.INSTANCE;
         }

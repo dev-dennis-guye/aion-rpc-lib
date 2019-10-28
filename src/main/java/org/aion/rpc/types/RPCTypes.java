@@ -60,12 +60,15 @@ public class RPCTypes{
 
         public BlockSpecifierUnion(ByteArray hash){
             this(hash,null,null);
+            if(hash == null) throw ParseErrorRPCException.INSTANCE;
         }
         public BlockSpecifierUnion(Long blockNumber){
             this(null,blockNumber,null);
+            if(blockNumber == null) throw ParseErrorRPCException.INSTANCE;
         }
         public BlockSpecifierUnion(BlockEnum blockEnum){
             this(null,null,blockEnum);
+            if(blockEnum == null) throw ParseErrorRPCException.INSTANCE;
         }
 
         public Object encode(){
@@ -90,15 +93,89 @@ public class RPCTypes{
     }
 
     /**
+    * Ensures that the result is type safe
+    */
+    public static final class ResultUnion{
+        public final BlockDetails blockDetails;
+        public final AionAddress address;
+        private ResultUnion(BlockDetails blockDetails ,AionAddress address ){
+            this.blockDetails=blockDetails;
+            this.address=address;
+        }
+
+        public ResultUnion(BlockDetails blockDetails){
+            this(blockDetails,null);
+            if(blockDetails == null) throw ParseErrorRPCException.INSTANCE;
+        }
+        public ResultUnion(AionAddress address){
+            this(null,address);
+            if(address == null) throw ParseErrorRPCException.INSTANCE;
+        }
+
+        public Object encode(){
+            if(this.blockDetails != null) return BlockDetailsConverter.encode(blockDetails);
+            if(this.address != null) return AionAddressConverter.encode(address);
+            throw ParseErrorRPCException.INSTANCE;
+        }
+
+        public static ResultUnion decode(Object object){
+            try{
+                return new ResultUnion(BlockDetailsConverter.decode(object));
+            }catch(Exception e){}
+            try{
+                return new ResultUnion(AionAddressConverter.decode(object));
+            }catch(Exception e){}
+            throw ParseErrorRPCException.INSTANCE;
+        }
+    }
+
+    /**
+    * Ensures that the request is type safe
+    */
+    public static final class ParamUnion{
+        public final EcRecoverParams ecRecoverParams;
+        public final BlockSpecifier blockSpecifier;
+        private ParamUnion(EcRecoverParams ecRecoverParams ,BlockSpecifier blockSpecifier ){
+            this.ecRecoverParams=ecRecoverParams;
+            this.blockSpecifier=blockSpecifier;
+        }
+
+        public ParamUnion(EcRecoverParams ecRecoverParams){
+            this(ecRecoverParams,null);
+            if(ecRecoverParams == null) throw ParseErrorRPCException.INSTANCE;
+        }
+        public ParamUnion(BlockSpecifier blockSpecifier){
+            this(null,blockSpecifier);
+            if(blockSpecifier == null) throw ParseErrorRPCException.INSTANCE;
+        }
+
+        public Object encode(){
+            if(this.ecRecoverParams != null) return EcRecoverParamsConverter.encode(ecRecoverParams);
+            if(this.blockSpecifier != null) return BlockSpecifierConverter.encode(blockSpecifier);
+            throw ParseErrorRPCException.INSTANCE;
+        }
+
+        public static ParamUnion decode(Object object){
+            try{
+                return new ParamUnion(EcRecoverParamsConverter.decode(object));
+            }catch(Exception e){}
+            try{
+                return new ParamUnion(BlockSpecifierConverter.decode(object));
+            }catch(Exception e){}
+            throw ParseErrorRPCException.INSTANCE;
+        }
+    }
+
+    /**
     * This is the standard request body for a JSON RPC Request
     */
     public static final class Request {
         public final Integer id;
         public final String method;
-        public final Object params;
+        public final ParamUnion params;
         public final VersionType jsonrpc;
 
-        public Request(Integer id ,String method ,Object params ,VersionType jsonrpc ){
+        public Request(Integer id ,String method ,ParamUnion params ,VersionType jsonrpc ){
             this.id=id;
             if(method==null) throw ParseErrorRPCException.INSTANCE;
             this.method=method;
@@ -112,11 +189,11 @@ public class RPCTypes{
     */
     public static final class Response {
         public final Integer id;
-        public final Object result;
+        public final ResultUnion result;
         public final RPCError error;
         public final VersionType jsonrpc;
 
-        public Response(Integer id ,Object result ,RPCError error ,VersionType jsonrpc ){
+        public Response(Integer id ,ResultUnion result ,RPCError error ,VersionType jsonrpc ){
             this.id=id;
             this.result=result;
             this.error=error;
