@@ -905,6 +905,79 @@ public class RPCTypesConverter{
         }
     }
 
+    public static class submitSeedParamsConverter{
+        public static submitSeedParams decode(Object object){
+            if(object==null || object.equals(JSONObject.NULL)) return null;
+            String s = object.toString();
+            try{
+                submitSeedParams obj;
+                if(s.startsWith("[") && s.endsWith("]")){
+                    JSONArray jsonArray = new JSONArray(s);
+                    obj = new submitSeedParams( DataHexStringConverter.decode(jsonArray.opt(0)), DataHexStringConverter.decode(jsonArray.opt(1)), AionAddressConverter.decode(jsonArray.opt(2)));
+                }
+                else if(s.startsWith("{") && s.endsWith("}")){
+                    JSONObject jsonObject = new JSONObject(s);
+                    obj = new submitSeedParams( DataHexStringConverter.decode(jsonObject.opt("newSeed")), DataHexStringConverter.decode(jsonObject.opt("signingPublicKey")), AionAddressConverter.decode(jsonObject.opt("coinbase")));
+                }
+                else{
+                    throw ParseErrorRPCException.INSTANCE;
+                }
+                return obj;
+            }
+            catch(Exception e){
+                throw InvalidParamsRPCException.INSTANCE;
+            }
+        }
+
+        public static Object encode(submitSeedParams obj){
+            try{
+                JSONArray arr = new JSONArray();
+                arr.put(0, obj.newSeed==null? JSONObject.NULL : DataHexStringConverter.encode(obj.newSeed));
+                arr.put(1, obj.signingPublicKey==null? JSONObject.NULL : DataHexStringConverter.encode(obj.signingPublicKey));
+                arr.put(2, obj.coinbase==null? JSONObject.NULL : AionAddressConverter.encode(obj.coinbase));
+                return arr;
+            }catch(Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+    }
+
+    public static class submitSignatureParamsConverter{
+        public static submitSignatureParams decode(Object object){
+            if(object==null || object.equals(JSONObject.NULL)) return null;
+            String s = object.toString();
+            try{
+                submitSignatureParams obj;
+                if(s.startsWith("[") && s.endsWith("]")){
+                    JSONArray jsonArray = new JSONArray(s);
+                    obj = new submitSignatureParams( DataHexStringConverter.decode(jsonArray.opt(0)), DataHexStringConverter.decode(jsonArray.opt(1)));
+                }
+                else if(s.startsWith("{") && s.endsWith("}")){
+                    JSONObject jsonObject = new JSONObject(s);
+                    obj = new submitSignatureParams( DataHexStringConverter.decode(jsonObject.opt("signature")), DataHexStringConverter.decode(jsonObject.opt("sealHash")));
+                }
+                else{
+                    throw ParseErrorRPCException.INSTANCE;
+                }
+                return obj;
+            }
+            catch(Exception e){
+                throw InvalidParamsRPCException.INSTANCE;
+            }
+        }
+
+        public static Object encode(submitSignatureParams obj){
+            try{
+                JSONArray arr = new JSONArray();
+                arr.put(0, obj.signature==null? JSONObject.NULL : DataHexStringConverter.encode(obj.signature));
+                arr.put(1, obj.sealHash==null? JSONObject.NULL : DataHexStringConverter.encode(obj.sealHash));
+                return arr;
+            }catch(Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+    }
+
     public static class VoidParamsConverter{
         public static VoidParams decode(Object object){
             if(object==null || object.equals(JSONObject.NULL)) return new VoidParams();

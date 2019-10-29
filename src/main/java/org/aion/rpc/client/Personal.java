@@ -16,21 +16,23 @@ import org.aion.util.types.ByteArrayWrapper;
 public class Personal{
 
     private final Provider provider;
+    private final IDGeneratorStrategy generator;
 
-    public Personal(final Provider provider){
+    public Personal(final Provider provider, IDGeneratorStrategy generator){
         this.provider = provider;
+        this.generator = generator;
     }
 
     public final AionAddress ecRecover(ByteArray dataThatWasSigned,ByteArray signature){
         EcRecoverParams params= new EcRecoverParams(dataThatWasSigned ,signature);
-        Request request = new Request(0, "personal_ecRecover", new ParamUnion(params), VersionType.Version2);
+        Request request = new Request(generator.generateID(), "personal_ecRecover", new ParamUnion(params), VersionType.Version2);
 
         return provider.execute(request, r->r.address);
     }
 
     public final <O> CompletableFuture<O> ecRecover(ByteArray dataThatWasSigned,ByteArray signature, BiFunction<AionAddress, RPCError, O> asyncTask){
         EcRecoverParams params= new EcRecoverParams(dataThatWasSigned ,signature);
-        Request request = new Request(0, "personal_ecRecover", new ParamUnion(params), VersionType.Version2);
+        Request request = new Request(generator.generateID(), "personal_ecRecover", new ParamUnion(params), VersionType.Version2);
 
         return provider.executeAsync(request, r->r.address, asyncTask);
     }

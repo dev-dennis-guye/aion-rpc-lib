@@ -25,6 +25,11 @@ public class RPCTypes{
             this.bytes = bytes;
         }
 
+        public ByteArray(String hexString){
+            if (hexString == null) throw new NullPointerException("Hex String is null");
+            this.bytes = ByteUtil.hexStringToBytes(hexString);
+        }
+
         public byte[] toBytes(){
             return Arrays.copyOf(bytes, bytes.length);
         }
@@ -42,6 +47,10 @@ public class RPCTypes{
 
         public static ByteArray wrap(byte[] bytes){
             return new ByteArray(bytes);
+        }
+
+        public static ByteArray wrap(String hexString){
+            return new ByteArray(hexString);
         }
     }
 
@@ -111,18 +120,30 @@ public class RPCTypes{
     public static final class ResultUnion{
         public final BlockDetails blockDetails;
         public final AionAddress address;
-        private ResultUnion(BlockDetails blockDetails ,AionAddress address ){
+        public final ByteArray byteArray;
+        public final Boolean bool;
+        private ResultUnion(BlockDetails blockDetails ,AionAddress address ,ByteArray byteArray ,Boolean bool ){
             this.blockDetails=blockDetails;
             this.address=address;
+            this.byteArray=byteArray;
+            this.bool=bool;
         }
 
         public ResultUnion(BlockDetails blockDetails){
-            this(blockDetails,null);
+            this(blockDetails,null,null,null);
             if(blockDetails == null) throw ParseErrorRPCException.INSTANCE;
         }
         public ResultUnion(AionAddress address){
-            this(null,address);
+            this(null,address,null,null);
             if(address == null) throw ParseErrorRPCException.INSTANCE;
+        }
+        public ResultUnion(ByteArray byteArray){
+            this(null,null,byteArray,null);
+            if(byteArray == null) throw ParseErrorRPCException.INSTANCE;
+        }
+        public ResultUnion(Boolean bool){
+            this(null,null,null,bool);
+            if(bool == null) throw ParseErrorRPCException.INSTANCE;
         }
 
         public static ResultUnion wrap(BlockDetails blockDetails){
@@ -133,10 +154,20 @@ public class RPCTypes{
             if(address == null) throw ParseErrorRPCException.INSTANCE;
             else return new ResultUnion(address);
         }
+        public static ResultUnion wrap(ByteArray byteArray){
+            if(byteArray == null) throw ParseErrorRPCException.INSTANCE;
+            else return new ResultUnion(byteArray);
+        }
+        public static ResultUnion wrap(Boolean bool){
+            if(bool == null) throw ParseErrorRPCException.INSTANCE;
+            else return new ResultUnion(bool);
+        }
 
         public Object encode(){
             if(this.blockDetails != null) return BlockDetailsConverter.encode(blockDetails);
             if(this.address != null) return AionAddressConverter.encode(address);
+            if(this.byteArray != null) return ByteArrayConverter.encode(byteArray);
+            if(this.bool != null) return BooleanConverter.encode(bool);
             throw ParseErrorRPCException.INSTANCE;
         }
 
@@ -146,6 +177,12 @@ public class RPCTypes{
             }catch(Exception e){}
             try{
                 return new ResultUnion(AionAddressConverter.decode(object));
+            }catch(Exception e){}
+            try{
+                return new ResultUnion(ByteArrayConverter.decode(object));
+            }catch(Exception e){}
+            try{
+                return new ResultUnion(BooleanConverter.decode(object));
             }catch(Exception e){}
             throw ParseErrorRPCException.INSTANCE;
         }
@@ -158,23 +195,35 @@ public class RPCTypes{
         public final EcRecoverParams ecRecoverParams;
         public final BlockSpecifier blockSpecifier;
         public final VoidParams voidParams;
-        private ParamUnion(EcRecoverParams ecRecoverParams ,BlockSpecifier blockSpecifier ,VoidParams voidParams ){
+        public final submitSeedParams submitSeedParams;
+        public final submitSignatureParams submitSignatureParams;
+        private ParamUnion(EcRecoverParams ecRecoverParams ,BlockSpecifier blockSpecifier ,VoidParams voidParams ,submitSeedParams submitSeedParams ,submitSignatureParams submitSignatureParams ){
             this.ecRecoverParams=ecRecoverParams;
             this.blockSpecifier=blockSpecifier;
             this.voidParams=voidParams;
+            this.submitSeedParams=submitSeedParams;
+            this.submitSignatureParams=submitSignatureParams;
         }
 
         public ParamUnion(EcRecoverParams ecRecoverParams){
-            this(ecRecoverParams,null,null);
+            this(ecRecoverParams,null,null,null,null);
             if(ecRecoverParams == null) throw ParseErrorRPCException.INSTANCE;
         }
         public ParamUnion(BlockSpecifier blockSpecifier){
-            this(null,blockSpecifier,null);
+            this(null,blockSpecifier,null,null,null);
             if(blockSpecifier == null) throw ParseErrorRPCException.INSTANCE;
         }
         public ParamUnion(VoidParams voidParams){
-            this(null,null,voidParams);
+            this(null,null,voidParams,null,null);
             if(voidParams == null) throw ParseErrorRPCException.INSTANCE;
+        }
+        public ParamUnion(submitSeedParams submitSeedParams){
+            this(null,null,null,submitSeedParams,null);
+            if(submitSeedParams == null) throw ParseErrorRPCException.INSTANCE;
+        }
+        public ParamUnion(submitSignatureParams submitSignatureParams){
+            this(null,null,null,null,submitSignatureParams);
+            if(submitSignatureParams == null) throw ParseErrorRPCException.INSTANCE;
         }
 
         public static ParamUnion wrap(EcRecoverParams ecRecoverParams){
@@ -189,11 +238,21 @@ public class RPCTypes{
             if(voidParams == null) throw ParseErrorRPCException.INSTANCE;
             else return new ParamUnion(voidParams);
         }
+        public static ParamUnion wrap(submitSeedParams submitSeedParams){
+            if(submitSeedParams == null) throw ParseErrorRPCException.INSTANCE;
+            else return new ParamUnion(submitSeedParams);
+        }
+        public static ParamUnion wrap(submitSignatureParams submitSignatureParams){
+            if(submitSignatureParams == null) throw ParseErrorRPCException.INSTANCE;
+            else return new ParamUnion(submitSignatureParams);
+        }
 
         public Object encode(){
             if(this.ecRecoverParams != null) return EcRecoverParamsConverter.encode(ecRecoverParams);
             if(this.blockSpecifier != null) return BlockSpecifierConverter.encode(blockSpecifier);
             if(this.voidParams != null) return VoidParamsConverter.encode(voidParams);
+            if(this.submitSeedParams != null) return submitSeedParamsConverter.encode(submitSeedParams);
+            if(this.submitSignatureParams != null) return submitSignatureParamsConverter.encode(submitSignatureParams);
             throw ParseErrorRPCException.INSTANCE;
         }
 
@@ -206,6 +265,12 @@ public class RPCTypes{
             }catch(Exception e){}
             try{
                 return new ParamUnion(VoidParamsConverter.decode(object));
+            }catch(Exception e){}
+            try{
+                return new ParamUnion(submitSeedParamsConverter.decode(object));
+            }catch(Exception e){}
+            try{
+                return new ParamUnion(submitSignatureParamsConverter.decode(object));
             }catch(Exception e){}
             throw ParseErrorRPCException.INSTANCE;
         }
@@ -480,6 +545,31 @@ public class RPCTypes{
         public BlockSpecifier(BlockSpecifierUnion block ){
             if(block==null) throw ParseErrorRPCException.INSTANCE;
             this.block=block;
+        }
+    }
+    public static final class submitSeedParams {
+        public final ByteArray newSeed;
+        public final ByteArray signingPublicKey;
+        public final AionAddress coinbase;
+
+        public submitSeedParams(ByteArray newSeed ,ByteArray signingPublicKey ,AionAddress coinbase ){
+            if(newSeed==null) throw ParseErrorRPCException.INSTANCE;
+            this.newSeed=newSeed;
+            if(signingPublicKey==null) throw ParseErrorRPCException.INSTANCE;
+            this.signingPublicKey=signingPublicKey;
+            if(coinbase==null) throw ParseErrorRPCException.INSTANCE;
+            this.coinbase=coinbase;
+        }
+    }
+    public static final class submitSignatureParams {
+        public final ByteArray signature;
+        public final ByteArray sealHash;
+
+        public submitSignatureParams(ByteArray signature ,ByteArray sealHash ){
+            if(signature==null) throw ParseErrorRPCException.INSTANCE;
+            this.signature=signature;
+            if(sealHash==null) throw ParseErrorRPCException.INSTANCE;
+            this.sealHash=sealHash;
         }
     }
     public static final class VoidParams {
