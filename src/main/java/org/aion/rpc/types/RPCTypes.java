@@ -71,6 +71,19 @@ public class RPCTypes{
             if(blockEnum == null) throw ParseErrorRPCException.INSTANCE;
         }
 
+        public static BlockSpecifierUnion wrap(ByteArray hash){
+            if(hash == null) throw ParseErrorRPCException.INSTANCE;
+            else return new BlockSpecifierUnion(hash);
+        }
+        public static BlockSpecifierUnion wrap(Long blockNumber){
+            if(blockNumber == null) throw ParseErrorRPCException.INSTANCE;
+            else return new BlockSpecifierUnion(blockNumber);
+        }
+        public static BlockSpecifierUnion wrap(BlockEnum blockEnum){
+            if(blockEnum == null) throw ParseErrorRPCException.INSTANCE;
+            else return new BlockSpecifierUnion(blockEnum);
+        }
+
         public Object encode(){
             if(this.hash != null) return ByteArrayConverter.encode(hash);
             if(this.blockNumber != null) return LongConverter.encode(blockNumber);
@@ -112,6 +125,15 @@ public class RPCTypes{
             if(address == null) throw ParseErrorRPCException.INSTANCE;
         }
 
+        public static ResultUnion wrap(BlockDetails blockDetails){
+            if(blockDetails == null) throw ParseErrorRPCException.INSTANCE;
+            else return new ResultUnion(blockDetails);
+        }
+        public static ResultUnion wrap(AionAddress address){
+            if(address == null) throw ParseErrorRPCException.INSTANCE;
+            else return new ResultUnion(address);
+        }
+
         public Object encode(){
             if(this.blockDetails != null) return BlockDetailsConverter.encode(blockDetails);
             if(this.address != null) return AionAddressConverter.encode(address);
@@ -135,23 +157,43 @@ public class RPCTypes{
     public static final class ParamUnion{
         public final EcRecoverParams ecRecoverParams;
         public final BlockSpecifier blockSpecifier;
-        private ParamUnion(EcRecoverParams ecRecoverParams ,BlockSpecifier blockSpecifier ){
+        public final VoidParams voidParams;
+        private ParamUnion(EcRecoverParams ecRecoverParams ,BlockSpecifier blockSpecifier ,VoidParams voidParams ){
             this.ecRecoverParams=ecRecoverParams;
             this.blockSpecifier=blockSpecifier;
+            this.voidParams=voidParams;
         }
 
         public ParamUnion(EcRecoverParams ecRecoverParams){
-            this(ecRecoverParams,null);
+            this(ecRecoverParams,null,null);
             if(ecRecoverParams == null) throw ParseErrorRPCException.INSTANCE;
         }
         public ParamUnion(BlockSpecifier blockSpecifier){
-            this(null,blockSpecifier);
+            this(null,blockSpecifier,null);
             if(blockSpecifier == null) throw ParseErrorRPCException.INSTANCE;
+        }
+        public ParamUnion(VoidParams voidParams){
+            this(null,null,voidParams);
+            if(voidParams == null) throw ParseErrorRPCException.INSTANCE;
+        }
+
+        public static ParamUnion wrap(EcRecoverParams ecRecoverParams){
+            if(ecRecoverParams == null) throw ParseErrorRPCException.INSTANCE;
+            else return new ParamUnion(ecRecoverParams);
+        }
+        public static ParamUnion wrap(BlockSpecifier blockSpecifier){
+            if(blockSpecifier == null) throw ParseErrorRPCException.INSTANCE;
+            else return new ParamUnion(blockSpecifier);
+        }
+        public static ParamUnion wrap(VoidParams voidParams){
+            if(voidParams == null) throw ParseErrorRPCException.INSTANCE;
+            else return new ParamUnion(voidParams);
         }
 
         public Object encode(){
             if(this.ecRecoverParams != null) return EcRecoverParamsConverter.encode(ecRecoverParams);
             if(this.blockSpecifier != null) return BlockSpecifierConverter.encode(blockSpecifier);
+            if(this.voidParams != null) return VoidParamsConverter.encode(voidParams);
             throw ParseErrorRPCException.INSTANCE;
         }
 
@@ -161,6 +203,9 @@ public class RPCTypes{
             }catch(Exception e){}
             try{
                 return new ParamUnion(BlockSpecifierConverter.decode(object));
+            }catch(Exception e){}
+            try{
+                return new ParamUnion(VoidParamsConverter.decode(object));
             }catch(Exception e){}
             throw ParseErrorRPCException.INSTANCE;
         }
@@ -179,7 +224,6 @@ public class RPCTypes{
             this.id=id;
             if(method==null) throw ParseErrorRPCException.INSTANCE;
             this.method=method;
-            if(params==null) throw ParseErrorRPCException.INSTANCE;
             this.params=params;
             this.jsonrpc=jsonrpc;
         }
@@ -436,6 +480,11 @@ public class RPCTypes{
         public BlockSpecifier(BlockSpecifierUnion block ){
             if(block==null) throw ParseErrorRPCException.INSTANCE;
             this.block=block;
+        }
+    }
+    public static final class VoidParams {
+
+        public VoidParams(){
         }
     }
 }

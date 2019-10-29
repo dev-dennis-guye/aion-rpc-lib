@@ -27,7 +27,7 @@ public interface PersonalRPC extends RPC{
                 EcRecoverParams params=request.params.ecRecoverParams;
                 if (params==null) throw InvalidParamsRPCException.INSTANCE;
                 AionAddress result = this.personal_ecRecover(params.dataThatWasSigned,params.signature);
-                res = new ResultUnion(result);
+                res = result == null ? null : new ResultUnion(result);
             }else
                 throw MethodNotFoundRPCException.INSTANCE;
         }

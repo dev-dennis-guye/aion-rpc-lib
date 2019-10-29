@@ -3,7 +3,17 @@ plugins {
 }
 
 group 'org.aion.rpc'
-version '0.1.1'
+
+def getCommitHash = { ->
+    def hashStdOut = new ByteArrayOutputStream()
+    exec {
+        commandLine "sh", "-c", "git log --pretty=format:%h | head -1"
+        standardOutput = hashStdOut
+    }
+    return hashStdOut.toString().trim()
+}
+
+version = "0.1.1.${getCommitHash()}"
 
 sourceCompatibility = 1.11
 

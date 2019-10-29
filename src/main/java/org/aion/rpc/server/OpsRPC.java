@@ -27,7 +27,7 @@ public interface OpsRPC extends RPC{
                 BlockSpecifier params=request.params.blockSpecifier;
                 if (params==null) throw InvalidParamsRPCException.INSTANCE;
                 BlockDetails result = this.ops_getBlockDetails(params.block);
-                res = new ResultUnion(result);
+                res = result == null ? null : new ResultUnion(result);
             }else
                 throw MethodNotFoundRPCException.INSTANCE;
         }
