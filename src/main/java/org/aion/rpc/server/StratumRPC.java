@@ -30,13 +30,13 @@ public interface StratumRPC extends RPC{
                 res = result == null ? null : new ResultUnion(result);
             }else
             if(request.method.equals("stratum_submitSeed")){
-                submitSeedParams params=request.params.submitSeedParams;
+                SubmitSeedParams params=request.params.submitSeedParams;
                 if (params==null) throw InvalidParamsRPCException.INSTANCE;
                 ByteArray result = this.stratum_submitSeed(params.newSeed,params.signingPublicKey,params.coinbase);
                 res = result == null ? null : new ResultUnion(result);
             }else
             if(request.method.equals("stratum_submitSignature")){
-                submitSignatureParams params=request.params.submitSignatureParams;
+                SubmitSignatureParams params=request.params.submitSignatureParams;
                 if (params==null) throw InvalidParamsRPCException.INSTANCE;
                 Boolean result = this.stratum_submitSignature(params.signature,params.sealHash);
                 res = result == null ? null : new ResultUnion(result);

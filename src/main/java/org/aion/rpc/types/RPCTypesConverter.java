@@ -25,7 +25,7 @@ public class RPCTypesConverter{
     private static final Pattern hexPattern= Pattern.compile("^0x[0-9a-fA-F]+");
     private static final Pattern decPattern = Pattern.compile("^-?[0-9]+");
     private static final Pattern booleanPattern=Pattern.compile("^([Tt]rue|[Ff]alse)");
-    private static final Pattern byteArrayPattern= Pattern.compile("^0x([0-9a-fA-F][0-9a-fA-F])*");
+    private static final Pattern byteArrayPattern= Pattern.compile("^0x[0-9a-fA-F]*");
 
     public static class ObjectConverter{
 
@@ -247,8 +247,8 @@ public class RPCTypesConverter{
     }
     public static class BlockSpecifierUnionConverter{
         public static BlockSpecifierUnion decode(Object str){
-            if(str==null || str.equals(JSONObject.NULL)) return null;
-            else return BlockSpecifierUnion.decode(str);
+             if(str==null|| str==JSONObject.NULL) return null;
+            return BlockSpecifierUnion.decode(str);
         }
 
         public static Object encode(BlockSpecifierUnion obj){
@@ -264,8 +264,8 @@ public class RPCTypesConverter{
 
     public static class ResultUnionConverter{
         public static ResultUnion decode(Object str){
-            if(str==null || str.equals(JSONObject.NULL)) return null;
-            else return ResultUnion.decode(str);
+             if(str==null|| str==JSONObject.NULL) return null;
+            return ResultUnion.decode(str);
         }
 
         public static Object encode(ResultUnion obj){
@@ -281,8 +281,8 @@ public class RPCTypesConverter{
 
     public static class ParamUnionConverter{
         public static ParamUnion decode(Object str){
-            if(str==null || str.equals(JSONObject.NULL)) return null;
-            else return ParamUnion.decode(str);
+            
+            return ParamUnion.decode(str);
         }
 
         public static Object encode(ParamUnion obj){
@@ -463,7 +463,7 @@ public class RPCTypesConverter{
             try{
                 if(str==null || str.equals(JSONObject.NULL)) return null;
                 JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString());
-                return new TransactionDetails( AionAddressConverter.decode(jsonObject.opt("contractAddress")) , Byte32StringConverter.decode(jsonObject.opt("hash")) , IntegerConverter.decode(jsonObject.opt("transactionIndex")) , BigIntegerHexStringConverter.decode(jsonObject.opt("value")) , LongHexStringConverter.decode(jsonObject.opt("nrg")) , LongHexStringConverter.decode(jsonObject.opt("nrgPrice")) , LongHexStringConverter.decode(jsonObject.opt("gas")) , LongHexStringConverter.decode(jsonObject.opt("gasPrice")) , DataHexStringConverter.decode(jsonObject.opt("nonce")) , AionAddressConverter.decode(jsonObject.opt("from")) , AionAddressConverter.decode(jsonObject.opt("to")) , LongConverter.decode(jsonObject.opt("timestamp")) , DataHexStringConverter.decode(jsonObject.opt("input")) , LongHexStringConverter.decode(jsonObject.opt("blockNumber")) , Byte32StringConverter.decode(jsonObject.opt("blockHash")) , StringConverter.decode(jsonObject.opt("error")) , ByteHexStringConverter.decode(jsonObject.opt("type")) , LongHexStringConverter.decode(jsonObject.opt("nrgUsed")) , LongHexStringConverter.decode(jsonObject.opt("gasUsed")) , BooleanConverter.decode(jsonObject.opt("hasInternalTransactions")) , TxLogDetailsListConverter.decode(jsonObject.opt("logs")) );
+                return new TransactionDetails( AionAddressConverter.decode(jsonObject.opt("contractAddress")) , Byte32StringConverter.decode(jsonObject.opt("hash")) , IntegerConverter.decode(jsonObject.opt("transactionIndex")) , BigIntegerHexStringConverter.decode(jsonObject.opt("value")) , LongHexStringConverter.decode(jsonObject.opt("nrg")) , LongHexStringConverter.decode(jsonObject.opt("nrgPrice")) , LongHexStringConverter.decode(jsonObject.opt("gas")) , LongHexStringConverter.decode(jsonObject.opt("gasPrice")) , DataHexStringConverter.decode(jsonObject.opt("nonce")) , AionAddressConverter.decode(jsonObject.opt("from")) , AionAddressConverter.decode(jsonObject.opt("to")) , LongConverter.decode(jsonObject.opt("timestamp")) , DataHexStringConverter.decode(jsonObject.opt("input")) , LongHexStringConverter.decode(jsonObject.opt("blockNumber")) , Byte32StringConverter.decode(jsonObject.opt("blockHash")) , StringConverter.decode(jsonObject.opt("error")) , ByteHexStringConverter.decode(jsonObject.opt("type")) , LongHexStringConverter.decode(jsonObject.opt("nrgUsed")) , LongHexStringConverter.decode(jsonObject.opt("gasUsed")) , BooleanConverter.decode(jsonObject.opt("hasInternalTransactions")) , TxLogDetailsListConverter.decode(jsonObject.opt("logs")) , Byte32StringConverter.decode(jsonObject.opt("beaconHash")) );
             } catch (Exception e){
                 throw ParseErrorRPCException.INSTANCE;
             }
@@ -494,6 +494,7 @@ public class RPCTypesConverter{
                 jsonObject.put("gasUsed", obj.gasUsed==null? JSONObject.NULL:LongHexStringConverter.encode(obj.gasUsed));
                 jsonObject.put("hasInternalTransactions", obj.hasInternalTransactions==null? JSONObject.NULL:BooleanConverter.encode(obj.hasInternalTransactions));
                 jsonObject.put("logs", obj.logs==null? JSONObject.NULL:TxLogDetailsListConverter.encode(obj.logs));
+                jsonObject.put("beaconHash", obj.beaconHash==null? JSONObject.NULL:Byte32StringConverter.encode(obj.beaconHash));
                 return jsonObject.toString();
             }
             catch (Exception e){
@@ -526,6 +527,7 @@ public class RPCTypesConverter{
                 jsonObject.put("gasUsed", LongHexStringConverter.encode(obj.gasUsed));
                 jsonObject.put("hasInternalTransactions", BooleanConverter.encode(obj.hasInternalTransactions));
                 jsonObject.put("logs", TxLogDetailsListConverter.encode(obj.logs));
+                jsonObject.put("beaconHash", Byte32StringConverter.encode(obj.beaconHash));
                 return jsonObject;
             }catch (Exception e){
                 throw ParseErrorRPCException.INSTANCE;
@@ -538,7 +540,7 @@ public class RPCTypesConverter{
             try{
                 if(str==null || str.equals(JSONObject.NULL)) return null;
                 JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString());
-                return new BlockDetails( LongConverter.decode(jsonObject.opt("number")) , DataHexStringConverter.decode(jsonObject.opt("hash")) , DataHexStringConverter.decode(jsonObject.opt("parentHash")) , ByteArrayConverter.decode(jsonObject.opt("logsBloom")) , DataHexStringConverter.decode(jsonObject.opt("transactionsRoot")) , DataHexStringConverter.decode(jsonObject.opt("statesRoot")) , DataHexStringConverter.decode(jsonObject.opt("receiptsRoot")) , BigIntegerHexStringConverter.decode(jsonObject.opt("difficulty")) , BigIntegerHexStringConverter.decode(jsonObject.opt("totalDifficulty")) , AionAddressConverter.decode(jsonObject.opt("miner")) , LongHexStringConverter.decode(jsonObject.opt("timestamp")) , LongHexStringConverter.decode(jsonObject.opt("gasUsed")) , LongHexStringConverter.decode(jsonObject.opt("gasLimit")) , LongHexStringConverter.decode(jsonObject.opt("nrgUsed")) , LongHexStringConverter.decode(jsonObject.opt("nrgLimit")) , ByteHexStringConverter.decode(jsonObject.opt("sealType")) , BooleanConverter.decode(jsonObject.opt("mainChain")) , DataHexStringConverter.decode(jsonObject.opt("extraData")) , IntegerConverter.decode(jsonObject.opt("size")) , IntegerConverter.decode(jsonObject.opt("numTransactions")) , DataHexStringConverter.decode(jsonObject.opt("txTrieRoot")) , BigIntegerHexStringConverter.decode(jsonObject.opt("blockReward")) , TransactionDetailsListConverter.decode(jsonObject.opt("transactions")) , DataHexStringConverter.decode(jsonObject.opt("nonce")) , DataHexStringConverter.decode(jsonObject.opt("solution")) , DataHexStringConverter.decode(jsonObject.opt("seed")) , DataHexStringConverter.decode(jsonObject.opt("signature")) , DataHexStringConverter.decode(jsonObject.opt("publicKey")) , IntegerConverter.decode(jsonObject.opt("blockTime")) );
+                return new BlockDetails( LongConverter.decode(jsonObject.opt("number")) , Byte32StringConverter.decode(jsonObject.opt("hash")) , Byte32StringConverter.decode(jsonObject.opt("parentHash")) , ByteArrayConverter.decode(jsonObject.opt("logsBloom")) , DataHexStringConverter.decode(jsonObject.opt("transactionsRoot")) , DataHexStringConverter.decode(jsonObject.opt("statesRoot")) , DataHexStringConverter.decode(jsonObject.opt("receiptsRoot")) , BigIntegerHexStringConverter.decode(jsonObject.opt("difficulty")) , BigIntegerHexStringConverter.decode(jsonObject.opt("totalDifficulty")) , AionAddressConverter.decode(jsonObject.opt("miner")) , LongHexStringConverter.decode(jsonObject.opt("timestamp")) , LongHexStringConverter.decode(jsonObject.opt("gasUsed")) , LongHexStringConverter.decode(jsonObject.opt("gasLimit")) , LongHexStringConverter.decode(jsonObject.opt("nrgUsed")) , LongHexStringConverter.decode(jsonObject.opt("nrgLimit")) , ByteHexStringConverter.decode(jsonObject.opt("sealType")) , BooleanConverter.decode(jsonObject.opt("mainChain")) , DataHexStringConverter.decode(jsonObject.opt("extraData")) , IntegerConverter.decode(jsonObject.opt("size")) , IntegerConverter.decode(jsonObject.opt("numTransactions")) , DataHexStringConverter.decode(jsonObject.opt("txTrieRoot")) , BigIntegerHexStringConverter.decode(jsonObject.opt("blockReward")) , TransactionDetailsListConverter.decode(jsonObject.opt("transactions")) , DataHexStringConverter.decode(jsonObject.opt("nonce")) , DataHexStringConverter.decode(jsonObject.opt("solution")) , DataHexStringConverter.decode(jsonObject.opt("seed")) , DataHexStringConverter.decode(jsonObject.opt("signature")) , DataHexStringConverter.decode(jsonObject.opt("publicKey")) , IntegerConverter.decode(jsonObject.opt("blockTime")) );
             } catch (Exception e){
                 throw ParseErrorRPCException.INSTANCE;
             }
@@ -549,8 +551,8 @@ public class RPCTypesConverter{
                 if(obj==null) return null;
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("number", obj.number==null? JSONObject.NULL:LongConverter.encode(obj.number));
-                jsonObject.put("hash", obj.hash==null? JSONObject.NULL:DataHexStringConverter.encode(obj.hash));
-                jsonObject.put("parentHash", obj.parentHash==null? JSONObject.NULL:DataHexStringConverter.encode(obj.parentHash));
+                jsonObject.put("hash", obj.hash==null? JSONObject.NULL:Byte32StringConverter.encode(obj.hash));
+                jsonObject.put("parentHash", obj.parentHash==null? JSONObject.NULL:Byte32StringConverter.encode(obj.parentHash));
                 jsonObject.put("logsBloom", obj.logsBloom==null? JSONObject.NULL:ByteArrayConverter.encode(obj.logsBloom));
                 jsonObject.put("transactionsRoot", obj.transactionsRoot==null? JSONObject.NULL:DataHexStringConverter.encode(obj.transactionsRoot));
                 jsonObject.put("statesRoot", obj.statesRoot==null? JSONObject.NULL:DataHexStringConverter.encode(obj.statesRoot));
@@ -589,8 +591,8 @@ public class RPCTypesConverter{
                 if(obj==null) return null;
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("number", LongConverter.encode(obj.number));
-                jsonObject.put("hash", DataHexStringConverter.encode(obj.hash));
-                jsonObject.put("parentHash", DataHexStringConverter.encode(obj.parentHash));
+                jsonObject.put("hash", Byte32StringConverter.encode(obj.hash));
+                jsonObject.put("parentHash", Byte32StringConverter.encode(obj.parentHash));
                 jsonObject.put("logsBloom", ByteArrayConverter.encode(obj.logsBloom));
                 jsonObject.put("transactionsRoot", DataHexStringConverter.encode(obj.transactionsRoot));
                 jsonObject.put("statesRoot", DataHexStringConverter.encode(obj.statesRoot));
@@ -625,7 +627,7 @@ public class RPCTypesConverter{
     }
 
     public static class DataHexStringConverter{
-        private static final Pattern regex = Pattern.compile("^0x([0-9a-fA-F][0-9a-fA-F])*");
+        private static final Pattern regex = Pattern.compile("^0x([0-9a-fA-F][0-9a-fA-F])*$");
 
         public static ByteArray decode(Object object){
             try{
@@ -660,7 +662,7 @@ public class RPCTypesConverter{
     }
 
     public static class BigIntegerHexStringConverter{
-        private static final Pattern regex = Pattern.compile("^0x[0-9a-fA-F]+");
+        private static final Pattern regex = Pattern.compile("^0x[0-9a-fA-F]+$");
 
         public static BigInteger decode(Object object){
             try{
@@ -695,7 +697,7 @@ public class RPCTypesConverter{
     }
 
     public static class LongHexStringConverter{
-        private static final Pattern regex = Pattern.compile("^0x[0-9a-fA-F]+");
+        private static final Pattern regex = Pattern.compile("^0x[0-9a-fA-F]+$");
 
         public static Long decode(Object object){
             try{
@@ -730,7 +732,7 @@ public class RPCTypesConverter{
     }
 
     public static class IntHexStringConverter{
-        private static final Pattern regex = Pattern.compile("^0x[0-9a-fA-F]+");
+        private static final Pattern regex = Pattern.compile("^0x[0-9a-fA-F]+$");
 
         public static Integer decode(Object object){
             try{
@@ -765,7 +767,7 @@ public class RPCTypesConverter{
     }
 
     public static class ByteHexStringConverter{
-        private static final Pattern regex = Pattern.compile("^0x[0-9a-fA-F]+");
+        private static final Pattern regex = Pattern.compile("^0x[0-9a-fA-F]+$");
 
         public static Byte decode(Object object){
             try{
@@ -831,6 +833,41 @@ public class RPCTypesConverter{
 
         private static boolean checkConstraints(String s){
             return regex.matcher(s).find() && s.length() >= 66 && s.length() <= 66;
+        }
+    }
+
+    public static class Byte64StringConverter{
+        private static final Pattern regex = Pattern.compile(".*");
+
+        public static ByteArray decode(Object object){
+            try{
+                if(object==null || object.equals(JSONObject.NULL)) return null;
+                else if (checkConstraints(object.toString())){
+                    return DataHexStringConverter.decode(object);
+                }
+                else{
+                    throw ParseErrorRPCException.INSTANCE;
+                }
+            } catch(Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+
+        public static String encode(ByteArray obj){
+            if (obj != null){
+                String result = DataHexStringConverter.encode(obj);
+                if(checkConstraints(result))
+                    return result;
+                else
+                    throw ParseErrorRPCException.INSTANCE;
+            }
+            else{
+                return null;
+            }
+        }
+
+        private static boolean checkConstraints(String s){
+            return regex.matcher(s).find() && s.length() >= 130 && s.length() <= 130;
         }
     }
 
@@ -905,19 +942,19 @@ public class RPCTypesConverter{
         }
     }
 
-    public static class submitSeedParamsConverter{
-        public static submitSeedParams decode(Object object){
+    public static class SubmitSeedParamsConverter{
+        public static SubmitSeedParams decode(Object object){
             if(object==null || object.equals(JSONObject.NULL)) return null;
             String s = object.toString();
             try{
-                submitSeedParams obj;
+                SubmitSeedParams obj;
                 if(s.startsWith("[") && s.endsWith("]")){
                     JSONArray jsonArray = new JSONArray(s);
-                    obj = new submitSeedParams( DataHexStringConverter.decode(jsonArray.opt(0)), DataHexStringConverter.decode(jsonArray.opt(1)), AionAddressConverter.decode(jsonArray.opt(2)));
+                    obj = new SubmitSeedParams( Byte64StringConverter.decode(jsonArray.opt(0)), Byte32StringConverter.decode(jsonArray.opt(1)), AionAddressConverter.decode(jsonArray.opt(2)));
                 }
                 else if(s.startsWith("{") && s.endsWith("}")){
                     JSONObject jsonObject = new JSONObject(s);
-                    obj = new submitSeedParams( DataHexStringConverter.decode(jsonObject.opt("newSeed")), DataHexStringConverter.decode(jsonObject.opt("signingPublicKey")), AionAddressConverter.decode(jsonObject.opt("coinbase")));
+                    obj = new SubmitSeedParams( Byte64StringConverter.decode(jsonObject.opt("newSeed")), Byte32StringConverter.decode(jsonObject.opt("signingPublicKey")), AionAddressConverter.decode(jsonObject.opt("coinbase")));
                 }
                 else{
                     throw ParseErrorRPCException.INSTANCE;
@@ -929,11 +966,11 @@ public class RPCTypesConverter{
             }
         }
 
-        public static Object encode(submitSeedParams obj){
+        public static Object encode(SubmitSeedParams obj){
             try{
                 JSONArray arr = new JSONArray();
-                arr.put(0, obj.newSeed==null? JSONObject.NULL : DataHexStringConverter.encode(obj.newSeed));
-                arr.put(1, obj.signingPublicKey==null? JSONObject.NULL : DataHexStringConverter.encode(obj.signingPublicKey));
+                arr.put(0, obj.newSeed==null? JSONObject.NULL : Byte64StringConverter.encode(obj.newSeed));
+                arr.put(1, obj.signingPublicKey==null? JSONObject.NULL : Byte32StringConverter.encode(obj.signingPublicKey));
                 arr.put(2, obj.coinbase==null? JSONObject.NULL : AionAddressConverter.encode(obj.coinbase));
                 return arr;
             }catch(Exception e){
@@ -942,19 +979,19 @@ public class RPCTypesConverter{
         }
     }
 
-    public static class submitSignatureParamsConverter{
-        public static submitSignatureParams decode(Object object){
+    public static class SubmitSignatureParamsConverter{
+        public static SubmitSignatureParams decode(Object object){
             if(object==null || object.equals(JSONObject.NULL)) return null;
             String s = object.toString();
             try{
-                submitSignatureParams obj;
+                SubmitSignatureParams obj;
                 if(s.startsWith("[") && s.endsWith("]")){
                     JSONArray jsonArray = new JSONArray(s);
-                    obj = new submitSignatureParams( DataHexStringConverter.decode(jsonArray.opt(0)), DataHexStringConverter.decode(jsonArray.opt(1)));
+                    obj = new SubmitSignatureParams( Byte64StringConverter.decode(jsonArray.opt(0)), Byte32StringConverter.decode(jsonArray.opt(1)));
                 }
                 else if(s.startsWith("{") && s.endsWith("}")){
                     JSONObject jsonObject = new JSONObject(s);
-                    obj = new submitSignatureParams( DataHexStringConverter.decode(jsonObject.opt("signature")), DataHexStringConverter.decode(jsonObject.opt("sealHash")));
+                    obj = new SubmitSignatureParams( Byte64StringConverter.decode(jsonObject.opt("signature")), Byte32StringConverter.decode(jsonObject.opt("sealHash")));
                 }
                 else{
                     throw ParseErrorRPCException.INSTANCE;
@@ -966,11 +1003,11 @@ public class RPCTypesConverter{
             }
         }
 
-        public static Object encode(submitSignatureParams obj){
+        public static Object encode(SubmitSignatureParams obj){
             try{
                 JSONArray arr = new JSONArray();
-                arr.put(0, obj.signature==null? JSONObject.NULL : DataHexStringConverter.encode(obj.signature));
-                arr.put(1, obj.sealHash==null? JSONObject.NULL : DataHexStringConverter.encode(obj.sealHash));
+                arr.put(0, obj.signature==null? JSONObject.NULL : Byte64StringConverter.encode(obj.signature));
+                arr.put(1, obj.sealHash==null? JSONObject.NULL : Byte32StringConverter.encode(obj.sealHash));
                 return arr;
             }catch(Exception e){
                 throw ParseErrorRPCException.INSTANCE;

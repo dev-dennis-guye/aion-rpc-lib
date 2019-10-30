@@ -31,14 +31,14 @@ public class Stratum{
     }
 
     public final ByteArray submitSeed(ByteArray newSeed,ByteArray signingPublicKey,AionAddress coinbase){
-        submitSeedParams params= new submitSeedParams(newSeed ,signingPublicKey ,coinbase);
+        SubmitSeedParams params= new SubmitSeedParams(newSeed ,signingPublicKey ,coinbase);
         Request request = new Request(generator.generateID(), "stratum_submitSeed", new ParamUnion(params), VersionType.Version2);
 
         return provider.execute(request, r->r.byteArray);
     }
 
     public final Boolean submitSignature(ByteArray signature,ByteArray sealHash){
-        submitSignatureParams params= new submitSignatureParams(signature ,sealHash);
+        SubmitSignatureParams params= new SubmitSignatureParams(signature ,sealHash);
         Request request = new Request(generator.generateID(), "stratum_submitSignature", new ParamUnion(params), VersionType.Version2);
 
         return provider.execute(request, r->r.bool);
@@ -52,14 +52,14 @@ public class Stratum{
     }
 
     public final <O> CompletableFuture<O> submitSeed(ByteArray newSeed,ByteArray signingPublicKey,AionAddress coinbase, BiFunction<ByteArray, RPCError, O> asyncTask){
-        submitSeedParams params= new submitSeedParams(newSeed ,signingPublicKey ,coinbase);
+        SubmitSeedParams params= new SubmitSeedParams(newSeed ,signingPublicKey ,coinbase);
         Request request = new Request(generator.generateID(), "stratum_submitSeed", new ParamUnion(params), VersionType.Version2);
 
         return provider.executeAsync(request, r->r.byteArray, asyncTask);
     }
 
     public final <O> CompletableFuture<O> submitSignature(ByteArray signature,ByteArray sealHash, BiFunction<Boolean, RPCError, O> asyncTask){
-        submitSignatureParams params= new submitSignatureParams(signature ,sealHash);
+        SubmitSignatureParams params= new SubmitSignatureParams(signature ,sealHash);
         Request request = new Request(generator.generateID(), "stratum_submitSignature", new ParamUnion(params), VersionType.Version2);
 
         return provider.executeAsync(request, r->r.bool, asyncTask);
