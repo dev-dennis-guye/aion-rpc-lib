@@ -25,6 +25,9 @@ public class RPCExceptions{
         else if(code == -32603){
             return InternalErrorRPCException.INSTANCE;
         }
+        else if(code == -32001){
+            return UnsupportedUnityFeatureRPCException.INSTANCE;
+        }
         else 
             return InternalErrorRPCException.INSTANCE;
     }
@@ -73,6 +76,13 @@ public class RPCExceptions{
         public static final InternalErrorRPCException INSTANCE = new InternalErrorRPCException();
         private InternalErrorRPCException(){
             super("{\"code\":-32603,\"message\":\"Internal error\"}");
+        }
+    }
+
+    public static class UnsupportedUnityFeatureRPCException extends RPCException{
+        public static final UnsupportedUnityFeatureRPCException INSTANCE = new UnsupportedUnityFeatureRPCException();
+        private UnsupportedUnityFeatureRPCException(){
+            super("{\"code\":-32001,\"message\":\"Unity fork is not enabled\"}");
         }
     }
 
