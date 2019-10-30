@@ -1,10 +1,6 @@
 package org.aion.rpc.server;
 
-import static org.aion.rpc.errors.RPCExceptions.InternalErrorRPCException;
-import static org.aion.rpc.errors.RPCExceptions.InvalidParamsRPCException;
-import static org.aion.rpc.errors.RPCExceptions.InvalidRequestRPCException;
-import static org.aion.rpc.errors.RPCExceptions.MethodNotFoundRPCException;
-import static org.aion.rpc.errors.RPCExceptions.ParseErrorRPCException;
+import static org.aion.rpc.errors.RPCExceptions.*;
 
 import java.util.Set;
 import org.aion.rpc.types.RPCTypes.*;
@@ -43,7 +39,7 @@ public interface StratumRPC extends RPC{
             }else
                 throw MethodNotFoundRPCException.INSTANCE;
         }
-        catch(InvalidRequestRPCException |ParseErrorRPCException |MethodNotFoundRPCException |InvalidParamsRPCException |InternalErrorRPCException e){
+        catch(RPCException e){
             throw e;
         }
         catch(Exception e){
