@@ -21,11 +21,10 @@ import org.json.JSONObject;
 *
 *****************************************************************************/
 public class RPCTypesConverter{
-
-    private static final Pattern hexPattern= Pattern.compile("^0x[0-9a-fA-F]+");
-    private static final Pattern decPattern = Pattern.compile("^-?[0-9]+");
-    private static final Pattern booleanPattern=Pattern.compile("^([Tt]rue|[Ff]alse)");
-    private static final Pattern byteArrayPattern= Pattern.compile("^0x[0-9a-fA-F]*");
+    private static final Pattern hexPattern = Pattern.compile("^0x[0-9a-fA-F]+$");
+    private static final Pattern decPattern = Pattern.compile("^-?[0-9]+$");
+    private static final Pattern booleanPattern = Pattern.compile("^([Tt]rue|[Ff]alse)$");
+    private static final Pattern byteArrayPattern = Pattern.compile("^0x[0-9a-fA-F]*$");
 
     public static class ObjectConverter{
 
