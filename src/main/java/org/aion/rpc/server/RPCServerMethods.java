@@ -2,6 +2,7 @@ package org.aion.rpc.server;
 
 import static org.aion.rpc.errors.RPCExceptions.*;
 
+import java.math.BigInteger;
 import java.util.Set;
 import org.aion.rpc.types.RPCTypes.*;
 import org.aion.rpc.types.RPCTypesConverter.*;
@@ -48,12 +49,42 @@ public interface RPCServerMethods extends RPC{
                 BlockDetails result = this.ops_getBlockDetails(params.block);
                 res = result == null ? null : new ResultUnion(result);
             }else
+            if(request.method.equals("getblocktemplate")){
+                VoidParams params=request.params.voidParams;
+                if (params==null) throw InvalidParamsRPCException.INSTANCE;
+                BlockTemplate result = this.getblocktemplate();
+                res = result == null ? null : new ResultUnion(result);
+            }else
+            if(request.method.equals("submitblock")){
+                SubmitBlockParams params=request.params.submitBlockParams;
+                if (params==null) throw InvalidParamsRPCException.INSTANCE;
+                SubmissionResult result = this.submitblock(params.nonce,params.solution,params.headerHash);
+                res = result == null ? null : new ResultUnion(result);
+            }else
+            if(request.method.equals("validateaddress")){
+                AddressParams params=request.params.addressParams;
+                if (params==null) throw InvalidParamsRPCException.INSTANCE;
+                ValidateAddressResult result = this.validateaddress(params.address);
+                res = result == null ? null : new ResultUnion(result);
+            }else
+            if(request.method.equals("getDifficulty")){
+                VoidParams params=request.params.voidParams;
+                if (params==null) throw InvalidParamsRPCException.INSTANCE;
+                BigInteger result = this.getDifficulty();
+                res = result == null ? null : new ResultUnion(result);
+            }else
+            if(request.method.equals("getMinerStats")){
+                AddressParams params=request.params.addressParams;
+                if (params==null) throw InvalidParamsRPCException.INSTANCE;
+                MinerStats result = this.getMinerStats(params.address);
+                res = result == null ? null : new ResultUnion(result);
+            }else
                 throw MethodNotFoundRPCException.INSTANCE;
         return res;
     }
 
     default Set<String> listMethods(){
-        return Set.of( "personal_ecRecover", "getseed", "submitseed", "submitsignature", "ops_getBlockDetails");
+        return Set.of( "personal_ecRecover", "getseed", "submitseed", "submitsignature", "ops_getBlockDetails", "getblocktemplate", "submitblock", "validateaddress", "getDifficulty", "getMinerStats");
     }
 
     AionAddress personal_ecRecover(ByteArray dataThatWasSigned, ByteArray signature);
@@ -61,4 +92,9 @@ public interface RPCServerMethods extends RPC{
     ByteArray submitseed(ByteArray newSeed, ByteArray signingPublicKey, AionAddress coinbase);
     Boolean submitsignature(ByteArray signature, ByteArray sealHash);
     BlockDetails ops_getBlockDetails(BlockSpecifierUnion block);
+    BlockTemplate getblocktemplate();
+    SubmissionResult submitblock(ByteArray nonce, ByteArray solution, ByteArray headerHash);
+    ValidateAddressResult validateaddress(AionAddress address);
+    BigInteger getDifficulty();
+    MinerStats getMinerStats(AionAddress address);
 }

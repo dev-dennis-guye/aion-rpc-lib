@@ -1,5 +1,6 @@
 package org.aion.rpc.client;
 
+import java.math.BigInteger;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 import org.aion.rpc.types.RPCTypes.*;
@@ -58,6 +59,41 @@ public class RPCClientMethods{
         return provider.execute(request, r->r.blockDetails);
     }
 
+    public final BlockTemplate getblocktemplate(){
+        VoidParams params= new VoidParams();
+        Request request = new Request(generator.generateID(), "getblocktemplate", new ParamUnion(params), VersionType.Version2);
+
+        return provider.execute(request, r->r.blockTemplate);
+    }
+
+    public final SubmissionResult submitblock(ByteArray nonce,ByteArray solution,ByteArray headerHash){
+        SubmitBlockParams params= new SubmitBlockParams(nonce ,solution ,headerHash);
+        Request request = new Request(generator.generateID(), "submitblock", new ParamUnion(params), VersionType.Version2);
+
+        return provider.execute(request, r->r.submissionResult);
+    }
+
+    public final ValidateAddressResult validateaddress(AionAddress address){
+        AddressParams params= new AddressParams(address);
+        Request request = new Request(generator.generateID(), "validateaddress", new ParamUnion(params), VersionType.Version2);
+
+        return provider.execute(request, r->r.validateAddressResult);
+    }
+
+    public final BigInteger getDifficulty(){
+        VoidParams params= new VoidParams();
+        Request request = new Request(generator.generateID(), "getDifficulty", new ParamUnion(params), VersionType.Version2);
+
+        return provider.execute(request, r->r.bigInt);
+    }
+
+    public final MinerStats getMinerStats(AionAddress address){
+        AddressParams params= new AddressParams(address);
+        Request request = new Request(generator.generateID(), "getMinerStats", new ParamUnion(params), VersionType.Version2);
+
+        return provider.execute(request, r->r.minerStats);
+    }
+
     public final <O> CompletableFuture<O> personal_ecRecover(ByteArray dataThatWasSigned,ByteArray signature, BiFunction<AionAddress, RPCError, O> asyncTask){
         EcRecoverParams params= new EcRecoverParams(dataThatWasSigned ,signature);
         Request request = new Request(generator.generateID(), "personal_ecRecover", new ParamUnion(params), VersionType.Version2);
@@ -91,5 +127,40 @@ public class RPCClientMethods{
         Request request = new Request(generator.generateID(), "ops_getBlockDetails", new ParamUnion(params), VersionType.Version2);
 
         return provider.executeAsync(request, r->r.blockDetails, asyncTask);
+    }
+
+    public final <O> CompletableFuture<O> getblocktemplate( BiFunction<BlockTemplate, RPCError, O> asyncTask){
+        VoidParams params= new VoidParams();
+        Request request = new Request(generator.generateID(), "getblocktemplate", new ParamUnion(params), VersionType.Version2);
+
+        return provider.executeAsync(request, r->r.blockTemplate, asyncTask);
+    }
+
+    public final <O> CompletableFuture<O> submitblock(ByteArray nonce,ByteArray solution,ByteArray headerHash, BiFunction<SubmissionResult, RPCError, O> asyncTask){
+        SubmitBlockParams params= new SubmitBlockParams(nonce ,solution ,headerHash);
+        Request request = new Request(generator.generateID(), "submitblock", new ParamUnion(params), VersionType.Version2);
+
+        return provider.executeAsync(request, r->r.submissionResult, asyncTask);
+    }
+
+    public final <O> CompletableFuture<O> validateaddress(AionAddress address, BiFunction<ValidateAddressResult, RPCError, O> asyncTask){
+        AddressParams params= new AddressParams(address);
+        Request request = new Request(generator.generateID(), "validateaddress", new ParamUnion(params), VersionType.Version2);
+
+        return provider.executeAsync(request, r->r.validateAddressResult, asyncTask);
+    }
+
+    public final <O> CompletableFuture<O> getDifficulty( BiFunction<BigInteger, RPCError, O> asyncTask){
+        VoidParams params= new VoidParams();
+        Request request = new Request(generator.generateID(), "getDifficulty", new ParamUnion(params), VersionType.Version2);
+
+        return provider.executeAsync(request, r->r.bigInt, asyncTask);
+    }
+
+    public final <O> CompletableFuture<O> getMinerStats(AionAddress address, BiFunction<MinerStats, RPCError, O> asyncTask){
+        AddressParams params= new AddressParams(address);
+        Request request = new Request(generator.generateID(), "getMinerStats", new ParamUnion(params), VersionType.Version2);
+
+        return provider.executeAsync(request, r->r.minerStats, asyncTask);
     }
 }

@@ -625,6 +625,164 @@ public class RPCTypesConverter{
         }
     }
 
+    public static class BlockTemplateConverter{
+        public static BlockTemplate decode(Object str){
+            try{
+                if(str==null || str.equals(JSONObject.NULL)) return null;
+                JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString());
+                return new BlockTemplate( Byte32StringConverter.decode(jsonObject.opt("previousblockhash")) , LongConverter.decode(jsonObject.opt("height")) , BigIntegerHexStringConverter.decode(jsonObject.opt("target")) , Byte32StringConverter.decode(jsonObject.opt("headerHash")) , BigIntegerHexStringConverter.decode(jsonObject.opt("blockBaseReward")) , BigIntegerHexStringConverter.decode(jsonObject.opt("blockTxFee")) );
+            } catch (Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+
+        public static String encodeStr( BlockTemplate obj){
+            try{
+                if(obj==null) return null;
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("previousblockhash", obj.previousblockhash==null? JSONObject.NULL:Byte32StringConverter.encode(obj.previousblockhash));
+                jsonObject.put("height", obj.height==null? JSONObject.NULL:LongConverter.encode(obj.height));
+                jsonObject.put("target", obj.target==null? JSONObject.NULL:BigIntegerHexStringConverter.encode(obj.target));
+                jsonObject.put("headerHash", obj.headerHash==null? JSONObject.NULL:Byte32StringConverter.encode(obj.headerHash));
+                jsonObject.put("blockBaseReward", obj.blockBaseReward==null? JSONObject.NULL:BigIntegerHexStringConverter.encode(obj.blockBaseReward));
+                jsonObject.put("blockTxFee", obj.blockTxFee==null? JSONObject.NULL:BigIntegerHexStringConverter.encode(obj.blockTxFee));
+                return jsonObject.toString();
+            }
+            catch (Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+
+        public static Object encode( BlockTemplate obj){
+            try{
+                if(obj==null) return null;
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("previousblockhash", Byte32StringConverter.encode(obj.previousblockhash));
+                jsonObject.put("height", LongConverter.encode(obj.height));
+                jsonObject.put("target", BigIntegerHexStringConverter.encode(obj.target));
+                jsonObject.put("headerHash", Byte32StringConverter.encode(obj.headerHash));
+                jsonObject.put("blockBaseReward", BigIntegerHexStringConverter.encode(obj.blockBaseReward));
+                jsonObject.put("blockTxFee", BigIntegerHexStringConverter.encode(obj.blockTxFee));
+                return jsonObject;
+            }catch (Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+    }
+
+    public static class SubmissionResultConverter{
+        public static SubmissionResult decode(Object str){
+            try{
+                if(str==null || str.equals(JSONObject.NULL)) return null;
+                JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString());
+                return new SubmissionResult( BooleanConverter.decode(jsonObject.opt("result")) );
+            } catch (Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+
+        public static String encodeStr( SubmissionResult obj){
+            try{
+                if(obj==null) return null;
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("result", obj.result==null? JSONObject.NULL:BooleanConverter.encode(obj.result));
+                return jsonObject.toString();
+            }
+            catch (Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+
+        public static Object encode( SubmissionResult obj){
+            try{
+                if(obj==null) return null;
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("result", BooleanConverter.encode(obj.result));
+                return jsonObject;
+            }catch (Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+    }
+
+    public static class ValidateAddressResultConverter{
+        public static ValidateAddressResult decode(Object str){
+            try{
+                if(str==null || str.equals(JSONObject.NULL)) return null;
+                JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString());
+                return new ValidateAddressResult( BooleanConverter.decode(jsonObject.opt("isvalid")) , AionAddressConverter.decode(jsonObject.opt("address")) , BooleanConverter.decode(jsonObject.opt("ismine")) );
+            } catch (Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+
+        public static String encodeStr( ValidateAddressResult obj){
+            try{
+                if(obj==null) return null;
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("isvalid", obj.isvalid==null? JSONObject.NULL:BooleanConverter.encode(obj.isvalid));
+                jsonObject.put("address", obj.address==null? JSONObject.NULL:AionAddressConverter.encode(obj.address));
+                jsonObject.put("ismine", obj.ismine==null? JSONObject.NULL:BooleanConverter.encode(obj.ismine));
+                return jsonObject.toString();
+            }
+            catch (Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+
+        public static Object encode( ValidateAddressResult obj){
+            try{
+                if(obj==null) return null;
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("isvalid", BooleanConverter.encode(obj.isvalid));
+                jsonObject.put("address", AionAddressConverter.encode(obj.address));
+                jsonObject.put("ismine", BooleanConverter.encode(obj.ismine));
+                return jsonObject;
+            }catch (Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+    }
+
+    public static class MinerStatsConverter{
+        public static MinerStats decode(Object str){
+            try{
+                if(str==null || str.equals(JSONObject.NULL)) return null;
+                JSONObject jsonObject = str instanceof JSONObject? (JSONObject)str :new JSONObject(str.toString());
+                return new MinerStats( DecimalStringConverter.decode(jsonObject.opt("networkHashRate")) , DecimalStringConverter.decode(jsonObject.opt("minerHashrate")) , DecimalStringConverter.decode(jsonObject.opt("minerHashrateShare")) );
+            } catch (Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+
+        public static String encodeStr( MinerStats obj){
+            try{
+                if(obj==null) return null;
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("networkHashRate", obj.networkHashRate==null? JSONObject.NULL:DecimalStringConverter.encode(obj.networkHashRate));
+                jsonObject.put("minerHashrate", obj.minerHashrate==null? JSONObject.NULL:DecimalStringConverter.encode(obj.minerHashrate));
+                jsonObject.put("minerHashrateShare", obj.minerHashrateShare==null? JSONObject.NULL:DecimalStringConverter.encode(obj.minerHashrateShare));
+                return jsonObject.toString();
+            }
+            catch (Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+
+        public static Object encode( MinerStats obj){
+            try{
+                if(obj==null) return null;
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("networkHashRate", DecimalStringConverter.encode(obj.networkHashRate));
+                jsonObject.put("minerHashrate", DecimalStringConverter.encode(obj.minerHashrate));
+                jsonObject.put("minerHashrateShare", DecimalStringConverter.encode(obj.minerHashrateShare));
+                return jsonObject;
+            }catch (Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+    }
+
     public static class DataHexStringConverter{
         private static final Pattern regex = Pattern.compile("^0x([0-9a-fA-F][0-9a-fA-F])*$");
 
@@ -870,6 +1028,41 @@ public class RPCTypesConverter{
         }
     }
 
+    public static class DecimalStringConverter{
+        private static final Pattern regex = Pattern.compile("^([+-]([1-9][0-9]*|[0-9]+[.][0-9])|[0-9]+([.][0-9])?)[0-9]*$");
+
+        public static String decode(Object object){
+            try{
+                if(object==null || object.equals(JSONObject.NULL)) return null;
+                else if (checkConstraints(object.toString())){
+                    return StringConverter.decode(object);
+                }
+                else{
+                    throw ParseErrorRPCException.INSTANCE;
+                }
+            } catch(Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+
+        public static String encode(String obj){
+            if (obj != null){
+                String result = StringConverter.encode(obj);
+                if(checkConstraints(result))
+                    return result;
+                else
+                    throw ParseErrorRPCException.INSTANCE;
+            }
+            else{
+                return null;
+            }
+        }
+
+        private static boolean checkConstraints(String s){
+            return regex.matcher(s).find() && s.length() >= 1 && s.length() <= 2147483647;
+        }
+    }
+
     public static class EcRecoverParamsConverter{
         public static EcRecoverParams decode(Object object){
             if(object==null || object.equals(JSONObject.NULL)) return null;
@@ -1034,6 +1227,78 @@ public class RPCTypesConverter{
         public static Object encode(VoidParams obj){
             try{
                 return null;
+            }catch(Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+    }
+
+    public static class SubmitBlockParamsConverter{
+        public static SubmitBlockParams decode(Object object){
+            if(object==null || object.equals(JSONObject.NULL)) return null;
+            String s = object.toString();
+            try{
+                SubmitBlockParams obj;
+                if(s.startsWith("[") && s.endsWith("]")){
+                    JSONArray jsonArray = new JSONArray(s);
+                    obj = new SubmitBlockParams( DataHexStringConverter.decode(jsonArray.opt(0)), DataHexStringConverter.decode(jsonArray.opt(1)), Byte32StringConverter.decode(jsonArray.opt(2)));
+                }
+                else if(s.startsWith("{") && s.endsWith("}")){
+                    JSONObject jsonObject = new JSONObject(s);
+                    obj = new SubmitBlockParams( DataHexStringConverter.decode(jsonObject.opt("nonce")), DataHexStringConverter.decode(jsonObject.opt("solution")), Byte32StringConverter.decode(jsonObject.opt("headerHash")));
+                }
+                else{
+                    throw ParseErrorRPCException.INSTANCE;
+                }
+                return obj;
+            }
+            catch(Exception e){
+                throw InvalidParamsRPCException.INSTANCE;
+            }
+        }
+
+        public static Object encode(SubmitBlockParams obj){
+            try{
+                JSONArray arr = new JSONArray();
+                arr.put(0, obj.nonce==null? JSONObject.NULL : DataHexStringConverter.encode(obj.nonce));
+                arr.put(1, obj.solution==null? JSONObject.NULL : DataHexStringConverter.encode(obj.solution));
+                arr.put(2, obj.headerHash==null? JSONObject.NULL : Byte32StringConverter.encode(obj.headerHash));
+                return arr;
+            }catch(Exception e){
+                throw ParseErrorRPCException.INSTANCE;
+            }
+        }
+    }
+
+    public static class AddressParamsConverter{
+        public static AddressParams decode(Object object){
+            if(object==null || object.equals(JSONObject.NULL)) return null;
+            String s = object.toString();
+            try{
+                AddressParams obj;
+                if(s.startsWith("[") && s.endsWith("]")){
+                    JSONArray jsonArray = new JSONArray(s);
+                    obj = new AddressParams( AionAddressConverter.decode(jsonArray.opt(0)));
+                }
+                else if(s.startsWith("{") && s.endsWith("}")){
+                    JSONObject jsonObject = new JSONObject(s);
+                    obj = new AddressParams( AionAddressConverter.decode(jsonObject.opt("address")));
+                }
+                else{
+                    throw ParseErrorRPCException.INSTANCE;
+                }
+                return obj;
+            }
+            catch(Exception e){
+                throw InvalidParamsRPCException.INSTANCE;
+            }
+        }
+
+        public static Object encode(AddressParams obj){
+            try{
+                JSONArray arr = new JSONArray();
+                arr.put(0, obj.address==null? JSONObject.NULL : AionAddressConverter.encode(obj.address));
+                return arr;
             }catch(Exception e){
                 throw ParseErrorRPCException.INSTANCE;
             }
