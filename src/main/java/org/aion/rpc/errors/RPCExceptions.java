@@ -34,6 +34,9 @@ public class RPCExceptions{
         else if(code == -32003){
             return FailedToSealBlockRPCException.INSTANCE;
         }
+        else if(code == -32004){
+            return FailedToComputeMetricsRPCException.INSTANCE;
+        }
         else 
             return InternalErrorRPCException.INSTANCE;
     }
@@ -103,6 +106,13 @@ public class RPCExceptions{
         public static final FailedToSealBlockRPCException INSTANCE = new FailedToSealBlockRPCException();
         private FailedToSealBlockRPCException(){
             super("{\"code\":-32003,\"message\":\"Could not seal the pow block.\"}");
+        }
+    }
+
+    public static class FailedToComputeMetricsRPCException extends RPCException{
+        public static final FailedToComputeMetricsRPCException INSTANCE = new FailedToComputeMetricsRPCException();
+        private FailedToComputeMetricsRPCException(){
+            super("{\"code\":-32004,\"message\":\"Could not compute the POW metrics.\"}");
         }
     }
 
