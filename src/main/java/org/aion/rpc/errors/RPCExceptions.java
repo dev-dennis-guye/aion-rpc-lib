@@ -28,14 +28,20 @@ public class RPCExceptions{
         else if(code == -32001){
             return UnsupportedUnityFeatureRPCException.INSTANCE;
         }
+        else if(code == -32002){
+            return BlockTemplateNotFoundRPCException.INSTANCE;
+        }
+        else if(code == -32003){
+            return FailedToSealBlockRPCException.INSTANCE;
+        }
         else 
             return InternalErrorRPCException.INSTANCE;
     }
 
     public abstract static class RPCException extends RuntimeException{
 
-        private RPCError error;
-        protected RPCException(String message){
+        private final transient RPCError error;
+        RPCException(String message){
             super(message);
             this.error = RPCErrorConverter.decode(message);
         }
@@ -83,6 +89,20 @@ public class RPCExceptions{
         public static final UnsupportedUnityFeatureRPCException INSTANCE = new UnsupportedUnityFeatureRPCException();
         private UnsupportedUnityFeatureRPCException(){
             super("{\"code\":-32001,\"message\":\"Unity fork is not enabled\"}");
+        }
+    }
+
+    public static class BlockTemplateNotFoundRPCException extends RPCException{
+        public static final BlockTemplateNotFoundRPCException INSTANCE = new BlockTemplateNotFoundRPCException();
+        private BlockTemplateNotFoundRPCException(){
+            super("{\"code\":-32002,\"message\":\"Could not find the block template for the supplied header hash.\"}");
+        }
+    }
+
+    public static class FailedToSealBlockRPCException extends RPCException{
+        public static final FailedToSealBlockRPCException INSTANCE = new FailedToSealBlockRPCException();
+        private FailedToSealBlockRPCException(){
+            super("{\"code\":-32003,\"message\":\"Could not seal the pow block.\"}");
         }
     }
 
