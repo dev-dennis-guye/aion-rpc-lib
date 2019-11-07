@@ -266,63 +266,59 @@ public class RPCTypes{
     * Ensures that the request is type safe
     */
     public static final class ParamUnion{
-        public final EcRecoverParams ecRecoverParams;
-        public final BlockSpecifier blockSpecifier;
         public final VoidParams voidParams;
+        public final EcRecoverParams ecRecoverParams;
         public final SubmitSeedParams submitSeedParams;
         public final SubmitSignatureParams submitSignatureParams;
         public final SubmitBlockParams submitBlockParams;
         public final AddressParams addressParams;
-        private ParamUnion(EcRecoverParams ecRecoverParams ,BlockSpecifier blockSpecifier ,VoidParams voidParams ,SubmitSeedParams submitSeedParams ,SubmitSignatureParams submitSignatureParams ,SubmitBlockParams submitBlockParams ,AddressParams addressParams ){
-            this.ecRecoverParams=ecRecoverParams;
-            this.blockSpecifier=blockSpecifier;
+        public final BlockSpecifier blockSpecifier;
+        private ParamUnion(VoidParams voidParams ,EcRecoverParams ecRecoverParams ,SubmitSeedParams submitSeedParams ,SubmitSignatureParams submitSignatureParams ,SubmitBlockParams submitBlockParams ,AddressParams addressParams ,BlockSpecifier blockSpecifier ){
             this.voidParams=voidParams;
+            this.ecRecoverParams=ecRecoverParams;
             this.submitSeedParams=submitSeedParams;
             this.submitSignatureParams=submitSignatureParams;
             this.submitBlockParams=submitBlockParams;
             this.addressParams=addressParams;
+            this.blockSpecifier=blockSpecifier;
         }
 
-        public ParamUnion(EcRecoverParams ecRecoverParams){
-            this(ecRecoverParams,null,null,null,null,null,null);
-            if(ecRecoverParams == null) throw ParseErrorRPCException.INSTANCE;
-        }
-        public ParamUnion(BlockSpecifier blockSpecifier){
-            this(null,blockSpecifier,null,null,null,null,null);
-            if(blockSpecifier == null) throw ParseErrorRPCException.INSTANCE;
-        }
         public ParamUnion(VoidParams voidParams){
-            this(null,null,voidParams,null,null,null,null);
+            this(voidParams,null,null,null,null,null,null);
             if(voidParams == null) throw ParseErrorRPCException.INSTANCE;
         }
+        public ParamUnion(EcRecoverParams ecRecoverParams){
+            this(null,ecRecoverParams,null,null,null,null,null);
+            if(ecRecoverParams == null) throw ParseErrorRPCException.INSTANCE;
+        }
         public ParamUnion(SubmitSeedParams submitSeedParams){
-            this(null,null,null,submitSeedParams,null,null,null);
+            this(null,null,submitSeedParams,null,null,null,null);
             if(submitSeedParams == null) throw ParseErrorRPCException.INSTANCE;
         }
         public ParamUnion(SubmitSignatureParams submitSignatureParams){
-            this(null,null,null,null,submitSignatureParams,null,null);
+            this(null,null,null,submitSignatureParams,null,null,null);
             if(submitSignatureParams == null) throw ParseErrorRPCException.INSTANCE;
         }
         public ParamUnion(SubmitBlockParams submitBlockParams){
-            this(null,null,null,null,null,submitBlockParams,null);
+            this(null,null,null,null,submitBlockParams,null,null);
             if(submitBlockParams == null) throw ParseErrorRPCException.INSTANCE;
         }
         public ParamUnion(AddressParams addressParams){
-            this(null,null,null,null,null,null,addressParams);
+            this(null,null,null,null,null,addressParams,null);
             if(addressParams == null) throw ParseErrorRPCException.INSTANCE;
         }
-
-        public static ParamUnion wrap(EcRecoverParams ecRecoverParams){
-            if(ecRecoverParams == null) throw ParseErrorRPCException.INSTANCE;
-            else return new ParamUnion(ecRecoverParams);
-        }
-        public static ParamUnion wrap(BlockSpecifier blockSpecifier){
+        public ParamUnion(BlockSpecifier blockSpecifier){
+            this(null,null,null,null,null,null,blockSpecifier);
             if(blockSpecifier == null) throw ParseErrorRPCException.INSTANCE;
-            else return new ParamUnion(blockSpecifier);
         }
+
         public static ParamUnion wrap(VoidParams voidParams){
             if(voidParams == null) throw ParseErrorRPCException.INSTANCE;
             else return new ParamUnion(voidParams);
+        }
+        public static ParamUnion wrap(EcRecoverParams ecRecoverParams){
+            if(ecRecoverParams == null) throw ParseErrorRPCException.INSTANCE;
+            else return new ParamUnion(ecRecoverParams);
         }
         public static ParamUnion wrap(SubmitSeedParams submitSeedParams){
             if(submitSeedParams == null) throw ParseErrorRPCException.INSTANCE;
@@ -340,27 +336,28 @@ public class RPCTypes{
             if(addressParams == null) throw ParseErrorRPCException.INSTANCE;
             else return new ParamUnion(addressParams);
         }
+        public static ParamUnion wrap(BlockSpecifier blockSpecifier){
+            if(blockSpecifier == null) throw ParseErrorRPCException.INSTANCE;
+            else return new ParamUnion(blockSpecifier);
+        }
 
         public Object encode(){
-            if(this.ecRecoverParams != null) return EcRecoverParamsConverter.encode(ecRecoverParams);
-            if(this.blockSpecifier != null) return BlockSpecifierConverter.encode(blockSpecifier);
             if(this.voidParams != null) return VoidParamsConverter.encode(voidParams);
+            if(this.ecRecoverParams != null) return EcRecoverParamsConverter.encode(ecRecoverParams);
             if(this.submitSeedParams != null) return SubmitSeedParamsConverter.encode(submitSeedParams);
             if(this.submitSignatureParams != null) return SubmitSignatureParamsConverter.encode(submitSignatureParams);
             if(this.submitBlockParams != null) return SubmitBlockParamsConverter.encode(submitBlockParams);
             if(this.addressParams != null) return AddressParamsConverter.encode(addressParams);
+            if(this.blockSpecifier != null) return BlockSpecifierConverter.encode(blockSpecifier);
             throw ParseErrorRPCException.INSTANCE;
         }
 
         public static ParamUnion decode(Object object){
             try{
-                return new ParamUnion(EcRecoverParamsConverter.decode(object));
-            }catch(Exception e){}
-            try{
-                return new ParamUnion(BlockSpecifierConverter.decode(object));
-            }catch(Exception e){}
-            try{
                 return new ParamUnion(VoidParamsConverter.decode(object));
+            }catch(Exception e){}
+            try{
+                return new ParamUnion(EcRecoverParamsConverter.decode(object));
             }catch(Exception e){}
             try{
                 return new ParamUnion(SubmitSeedParamsConverter.decode(object));
@@ -373,6 +370,9 @@ public class RPCTypes{
             }catch(Exception e){}
             try{
                 return new ParamUnion(AddressParamsConverter.decode(object));
+            }catch(Exception e){}
+            try{
+                return new ParamUnion(BlockSpecifierConverter.decode(object));
             }catch(Exception e){}
             throw ParseErrorRPCException.INSTANCE;
         }

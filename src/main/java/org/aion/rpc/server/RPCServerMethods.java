@@ -20,61 +20,61 @@ public interface RPCServerMethods extends RPC{
         ResultUnion res;
             //check that the request can be fulfilled by this class
             if(request.method.equals("personal_ecRecover")){
-                EcRecoverParams params=request.params.ecRecoverParams;
+                EcRecoverParams params= EcRecoverParamsConverter.decode(request.params.encode());
                 if (params==null) throw InvalidParamsRPCException.INSTANCE;
                 AionAddress result = this.personal_ecRecover(params.dataThatWasSigned,params.signature);
                 res = result == null ? null : new ResultUnion(result);
             }else
             if(request.method.equals("getseed")){
-                VoidParams params=request.params.voidParams;
+                VoidParams params= VoidParamsConverter.decode(request.params.encode());
                 if (params==null) throw InvalidParamsRPCException.INSTANCE;
                 ByteArray result = this.getseed();
                 res = result == null ? null : new ResultUnion(result);
             }else
             if(request.method.equals("submitseed")){
-                SubmitSeedParams params=request.params.submitSeedParams;
+                SubmitSeedParams params= SubmitSeedParamsConverter.decode(request.params.encode());
                 if (params==null) throw InvalidParamsRPCException.INSTANCE;
                 ByteArray result = this.submitseed(params.newSeed,params.signingPublicKey,params.coinbase);
                 res = result == null ? null : new ResultUnion(result);
             }else
             if(request.method.equals("submitsignature")){
-                SubmitSignatureParams params=request.params.submitSignatureParams;
+                SubmitSignatureParams params= SubmitSignatureParamsConverter.decode(request.params.encode());
                 if (params==null) throw InvalidParamsRPCException.INSTANCE;
                 Boolean result = this.submitsignature(params.signature,params.sealHash);
                 res = result == null ? null : new ResultUnion(result);
             }else
             if(request.method.equals("ops_getBlockDetails")){
-                BlockSpecifier params=request.params.blockSpecifier;
+                BlockSpecifier params= BlockSpecifierConverter.decode(request.params.encode());
                 if (params==null) throw InvalidParamsRPCException.INSTANCE;
                 BlockDetails result = this.ops_getBlockDetails(params.block);
                 res = result == null ? null : new ResultUnion(result);
             }else
             if(request.method.equals("getblocktemplate")){
-                VoidParams params=request.params.voidParams;
+                VoidParams params= VoidParamsConverter.decode(request.params.encode());
                 if (params==null) throw InvalidParamsRPCException.INSTANCE;
                 BlockTemplate result = this.getblocktemplate();
                 res = result == null ? null : new ResultUnion(result);
             }else
             if(request.method.equals("submitblock")){
-                SubmitBlockParams params=request.params.submitBlockParams;
+                SubmitBlockParams params= SubmitBlockParamsConverter.decode(request.params.encode());
                 if (params==null) throw InvalidParamsRPCException.INSTANCE;
                 SubmissionResult result = this.submitblock(params.nonce,params.solution,params.headerHash);
                 res = result == null ? null : new ResultUnion(result);
             }else
             if(request.method.equals("validateaddress")){
-                AddressParams params=request.params.addressParams;
+                AddressParams params= AddressParamsConverter.decode(request.params.encode());
                 if (params==null) throw InvalidParamsRPCException.INSTANCE;
                 ValidateAddressResult result = this.validateaddress(params.address);
                 res = result == null ? null : new ResultUnion(result);
             }else
             if(request.method.equals("getDifficulty")){
-                VoidParams params=request.params.voidParams;
+                VoidParams params= VoidParamsConverter.decode(request.params.encode());
                 if (params==null) throw InvalidParamsRPCException.INSTANCE;
                 BigInteger result = this.getDifficulty();
                 res = result == null ? null : new ResultUnion(result);
             }else
             if(request.method.equals("getMinerStats")){
-                AddressParams params=request.params.addressParams;
+                AddressParams params= AddressParamsConverter.decode(request.params.encode());
                 if (params==null) throw InvalidParamsRPCException.INSTANCE;
                 MinerStats result = this.getMinerStats(params.address);
                 res = result == null ? null : new ResultUnion(result);

@@ -1071,11 +1071,13 @@ public class RPCTypesConverter{
                 EcRecoverParams obj;
                 if(s.startsWith("[") && s.endsWith("]")){
                     JSONArray jsonArray = new JSONArray(s);
-                    obj = new EcRecoverParams( DataHexStringConverter.decode(jsonArray.opt(0)), DataHexStringConverter.decode(jsonArray.opt(1)));
+                    if(jsonArray.length() != 2) throw ParseErrorRPCException.INSTANCE;
+                    else obj = new EcRecoverParams( DataHexStringConverter.decode(jsonArray.opt(0)), DataHexStringConverter.decode(jsonArray.opt(1)));
                 }
                 else if(s.startsWith("{") && s.endsWith("}")){
                     JSONObject jsonObject = new JSONObject(s);
-                    obj = new EcRecoverParams( DataHexStringConverter.decode(jsonObject.opt("dataThatWasSigned")), DataHexStringConverter.decode(jsonObject.opt("signature")));
+                    if(jsonObject.keySet().size() != 2) throw ParseErrorRPCException.INSTANCE;
+                    else obj = new EcRecoverParams( DataHexStringConverter.decode(jsonObject.opt("dataThatWasSigned")), DataHexStringConverter.decode(jsonObject.opt("signature")));
                 }
                 else{
                     throw ParseErrorRPCException.INSTANCE;
@@ -1107,11 +1109,13 @@ public class RPCTypesConverter{
                 BlockSpecifier obj;
                 if(s.startsWith("[") && s.endsWith("]")){
                     JSONArray jsonArray = new JSONArray(s);
-                    obj = new BlockSpecifier( BlockSpecifierUnionConverter.decode(jsonArray.opt(0)));
+                    if(jsonArray.length() != 1) throw ParseErrorRPCException.INSTANCE;
+                    else obj = new BlockSpecifier( BlockSpecifierUnionConverter.decode(jsonArray.opt(0)));
                 }
                 else if(s.startsWith("{") && s.endsWith("}")){
                     JSONObject jsonObject = new JSONObject(s);
-                    obj = new BlockSpecifier( BlockSpecifierUnionConverter.decode(jsonObject.opt("block")));
+                    if(jsonObject.keySet().size() != 1) throw ParseErrorRPCException.INSTANCE;
+                    else obj = new BlockSpecifier( BlockSpecifierUnionConverter.decode(jsonObject.opt("block")));
                 }
                 else{
                     throw ParseErrorRPCException.INSTANCE;
@@ -1142,11 +1146,13 @@ public class RPCTypesConverter{
                 SubmitSeedParams obj;
                 if(s.startsWith("[") && s.endsWith("]")){
                     JSONArray jsonArray = new JSONArray(s);
-                    obj = new SubmitSeedParams( Byte64StringConverter.decode(jsonArray.opt(0)), Byte32StringConverter.decode(jsonArray.opt(1)), AionAddressConverter.decode(jsonArray.opt(2)));
+                    if(jsonArray.length() != 3) throw ParseErrorRPCException.INSTANCE;
+                    else obj = new SubmitSeedParams( Byte64StringConverter.decode(jsonArray.opt(0)), Byte32StringConverter.decode(jsonArray.opt(1)), AionAddressConverter.decode(jsonArray.opt(2)));
                 }
                 else if(s.startsWith("{") && s.endsWith("}")){
                     JSONObject jsonObject = new JSONObject(s);
-                    obj = new SubmitSeedParams( Byte64StringConverter.decode(jsonObject.opt("newSeed")), Byte32StringConverter.decode(jsonObject.opt("signingPublicKey")), AionAddressConverter.decode(jsonObject.opt("coinbase")));
+                    if(jsonObject.keySet().size() != 3) throw ParseErrorRPCException.INSTANCE;
+                    else obj = new SubmitSeedParams( Byte64StringConverter.decode(jsonObject.opt("newSeed")), Byte32StringConverter.decode(jsonObject.opt("signingPublicKey")), AionAddressConverter.decode(jsonObject.opt("coinbase")));
                 }
                 else{
                     throw ParseErrorRPCException.INSTANCE;
@@ -1179,11 +1185,13 @@ public class RPCTypesConverter{
                 SubmitSignatureParams obj;
                 if(s.startsWith("[") && s.endsWith("]")){
                     JSONArray jsonArray = new JSONArray(s);
-                    obj = new SubmitSignatureParams( Byte64StringConverter.decode(jsonArray.opt(0)), Byte32StringConverter.decode(jsonArray.opt(1)));
+                    if(jsonArray.length() != 2) throw ParseErrorRPCException.INSTANCE;
+                    else obj = new SubmitSignatureParams( Byte64StringConverter.decode(jsonArray.opt(0)), Byte32StringConverter.decode(jsonArray.opt(1)));
                 }
                 else if(s.startsWith("{") && s.endsWith("}")){
                     JSONObject jsonObject = new JSONObject(s);
-                    obj = new SubmitSignatureParams( Byte64StringConverter.decode(jsonObject.opt("signature")), Byte32StringConverter.decode(jsonObject.opt("sealHash")));
+                    if(jsonObject.keySet().size() != 2) throw ParseErrorRPCException.INSTANCE;
+                    else obj = new SubmitSignatureParams( Byte64StringConverter.decode(jsonObject.opt("signature")), Byte32StringConverter.decode(jsonObject.opt("sealHash")));
                 }
                 else{
                     throw ParseErrorRPCException.INSTANCE;
@@ -1241,11 +1249,13 @@ public class RPCTypesConverter{
                 SubmitBlockParams obj;
                 if(s.startsWith("[") && s.endsWith("]")){
                     JSONArray jsonArray = new JSONArray(s);
-                    obj = new SubmitBlockParams( DataHexStringConverter.decode(jsonArray.opt(0)), DataHexStringConverter.decode(jsonArray.opt(1)), Byte32StringConverter.decode(jsonArray.opt(2)));
+                    if(jsonArray.length() != 3) throw ParseErrorRPCException.INSTANCE;
+                    else obj = new SubmitBlockParams( DataHexStringConverter.decode(jsonArray.opt(0)), DataHexStringConverter.decode(jsonArray.opt(1)), Byte32StringConverter.decode(jsonArray.opt(2)));
                 }
                 else if(s.startsWith("{") && s.endsWith("}")){
                     JSONObject jsonObject = new JSONObject(s);
-                    obj = new SubmitBlockParams( DataHexStringConverter.decode(jsonObject.opt("nonce")), DataHexStringConverter.decode(jsonObject.opt("solution")), Byte32StringConverter.decode(jsonObject.opt("headerHash")));
+                    if(jsonObject.keySet().size() != 3) throw ParseErrorRPCException.INSTANCE;
+                    else obj = new SubmitBlockParams( DataHexStringConverter.decode(jsonObject.opt("nonce")), DataHexStringConverter.decode(jsonObject.opt("solution")), Byte32StringConverter.decode(jsonObject.opt("headerHash")));
                 }
                 else{
                     throw ParseErrorRPCException.INSTANCE;
@@ -1278,11 +1288,13 @@ public class RPCTypesConverter{
                 AddressParams obj;
                 if(s.startsWith("[") && s.endsWith("]")){
                     JSONArray jsonArray = new JSONArray(s);
-                    obj = new AddressParams( AionAddressConverter.decode(jsonArray.opt(0)));
+                    if(jsonArray.length() != 1) throw ParseErrorRPCException.INSTANCE;
+                    else obj = new AddressParams( AionAddressConverter.decode(jsonArray.opt(0)));
                 }
                 else if(s.startsWith("{") && s.endsWith("}")){
                     JSONObject jsonObject = new JSONObject(s);
-                    obj = new AddressParams( AionAddressConverter.decode(jsonObject.opt("address")));
+                    if(jsonObject.keySet().size() != 1) throw ParseErrorRPCException.INSTANCE;
+                    else obj = new AddressParams( AionAddressConverter.decode(jsonObject.opt("address")));
                 }
                 else{
                     throw ParseErrorRPCException.INSTANCE;
